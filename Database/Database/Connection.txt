@@ -1,0 +1,1 @@
+﻿Data Source=C:\Work\Psyhologic calculating system\Database\Interpretor.sdf
