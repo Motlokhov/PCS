@@ -1,6 +1,6 @@
 ﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Controls="clr-namespace:PCS_Forms.Controls" x:Class="PCS_Forms.Windows.RegistrationWindow"
         Title="Регистрация" Height="256.963" Width="330.44" Closing="RegistrationWindow_Closing" Background="#99B8F3B0" Icon="/PSC;component/Images/Logo.ico">
-    <Grid>
+    <Grid Background="#99B8F3B2">
         <Grid.RowDefinitions>
             <RowDefinition Height="23*"/>
             <RowDefinition Height="23*"/>

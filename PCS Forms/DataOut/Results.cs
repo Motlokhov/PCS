@@ -55,6 +55,7 @@ namespace PCS_Forms.DataOut
             database.ReadData("SELECT Id FROM DataTested ORDER BY Id DESC");
             database.Reader.Read();
             int id = Convert.ToInt32(database.Reader["Id"]);
+            database.ConnectionClose();
             return id;
         }
     }

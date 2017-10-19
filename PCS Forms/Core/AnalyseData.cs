@@ -53,12 +53,12 @@ namespace PCS_Forms.Core
             this.DateTesting = date.Date;
         }
 
-        public void StartInterpretation()
+        public void Interpretation()
         {
 
             try
             {
-                this.ListReportData = new List<ReportData>(this.Methodology.StartInterpretation());
+                this.ListReportData = new List<ReportData>(this.Methodology.Interpretation());
             }
             catch (Exception ex)
             {
@@ -68,14 +68,25 @@ namespace PCS_Forms.Core
             
         }
 
+        public void InterpretationAndSave()
+        {
+            this.Interpretation();
+            this.SaveResults();
+        }
+
         public void SaveResults()
         {
-            
-             this.Results =new Results();
+            if (this.Methodology == null)
+                return;
+            this.Results =new Results();
             foreach (Test test in this.Methodology.Tests)
                 foreach (Parameter parameter in test.Parameters)
                     foreach (Value value in parameter.Values)
+                    {
+                        if(string.IsNullOrEmpty(value.Meaning))
+                            return;
                         Results.AddResult(new DataResult(value.Id, value.Meaning));
+                    }
             this.Results.SaveResults(this);
         }
 

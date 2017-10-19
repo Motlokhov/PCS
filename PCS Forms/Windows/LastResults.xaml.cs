@@ -50,7 +50,7 @@ namespace PCS_Forms.Windows
                 AnalyseData analyse = new AnalyseData(LoadDataAs.PastTesting);
                 analyse.SetStudent(new Student((int)database.Reader["Id"]));
                 analyse.SetPsychologist(new Psychologist((int)database.Reader["Psychologist"]));
-                analyse.SetDate((DateTime)database.Reader["Date"]);
+                analyse.SetDate(Convert.ToDateTime(database.Reader["Date"]));
                 analyse.CreateMethodology((Method)Convert.ToByte(database.Reader["Methodology"]));
                 ListAnalyse.Add(analyse);
                 
@@ -74,7 +74,7 @@ namespace PCS_Forms.Windows
             Button button = sender as Button;
             if (button != null)
             {
-                ListAnalyse[data.Number-1].StartInterpretation();
+                ListAnalyse[data.Number-1].Interpretation();
                 ResultsWindow results = new ResultsWindow();
                 results.WriteResults(ListAnalyse[data.Number-1]);
                 results.Show();

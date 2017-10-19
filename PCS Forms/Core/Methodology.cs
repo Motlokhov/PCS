@@ -56,14 +56,14 @@ namespace PCS_Forms.Core
             return Tabitem;
         }
 
-        public List<ReportData> StartInterpretation()
+        public List<ReportData> Interpretation()
         {
             List<ReportData> listrepdata = new List<ReportData>();
             foreach (Test test in Tests)
-            {
                 listrepdata.Add(test.Interpretation());
-            }
             return listrepdata;
         }
+
+        
     }
 }

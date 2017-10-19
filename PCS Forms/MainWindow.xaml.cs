@@ -116,7 +116,15 @@ namespace PCS_Forms
 
         private void ButtonStartInterpretation_Click(object sender, RoutedEventArgs e)
         {
-            this.StartIterpretation(); 
+            try
+            {
+                this.StartIterpretation(true);
+                this.ShowResults();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
         private void SaveResults()
@@ -124,22 +132,33 @@ namespace PCS_Forms
             this.Analyse.SaveResults();
         }
 
-        private void StartIterpretation()
+        private void StartIterpretation(bool must_results_be_saving)
         {
             if (this.CheckAllInputControls(this.TestDataGrid))
                 if (this.CheckAllInputControls(this.PsyDataGrid))
                     if (this.CheckAllInputControls(this.TestedDataGrid))
                     {
+                        //this.Analyse = new AnalyseData(LoadDataAs.NewTesting);
                         this.SetStudent();
                         this.SetDate();
-                        this.Analyse.StartInterpretation();
-                        if (this.Analyse.ListReportData != null)
-                        {
-                            this.SaveResults();
-                            ResultsWindow resultsWindow = new ResultsWindow();
-                            resultsWindow.WriteResults(Analyse);
-                        }
+                        if (must_results_be_saving)
+                            this.Analyse.InterpretationAndSave();
+                        else
+                            this.Analyse.Interpretation();
                     }
+        }
+
+        private void ShowResults()
+        {
+            ResultsWindow resultsWindow;
+            if (this.Analyse.ListReportData != null)
+                if (this.CheckIsWindowOpen("ResultsWindow"))
+                {
+                    resultsWindow = new ResultsWindow();
+                    resultsWindow.WriteResults(Analyse);
+                    this.ReloadMethod();
+                }
+            
         }
 
         private void SetDate()
@@ -171,10 +190,12 @@ namespace PCS_Forms
         {
             if (MainTab.HasItems)
                 MainTab.Items.Clear();
-            ComboBox combo = sender as ComboBox;
+            ComboBox combobox = sender as ComboBox;
             try
             {
-                Analyse.CreateMethodology((Method)combo.SelectedIndex + 1);
+                if (combobox.SelectedIndex == -1)
+                    return;
+                Analyse.CreateMethodology((Method)combobox.SelectedIndex + 1);
                 MyTabitem tabitem = Analyse.Methodology.AddTabItem();
                 this.MainTab.Items.Add(tabitem);
                 MainTab.SelectedIndex = 0;
@@ -182,7 +203,6 @@ namespace PCS_Forms
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
-               // MessageBox.Show(string.Format("В эту версию программы не входит Методика {0}", EnumUtils.ValueOf((Method)combo.SelectedIndex)));
             }
         }
 
@@ -201,19 +221,18 @@ namespace PCS_Forms
         private void ButtonLastResults_Click(object sender, RoutedEventArgs e)
         {
             LastResults lastresults;
-            for (int i = 0; i < App.Current.Windows.Count; i++)
-            {
-                if (App.Current.Windows[i].Name == "LastResultsWindow")
-                    break;
-                if (i + 1 == App.Current.Windows.Count)
-                {
-                    lastresults = new LastResults();
-                    break;
-                }
-            }
+            if (CheckIsWindowOpen("LastResultsWindow"))
+                lastresults = new LastResults();
         }
 
-       
+
+        private bool CheckIsWindowOpen(string window_name)
+        {
+            for (int i = 0; i < App.Current.Windows.Count; i++)
+                if (App.Current.Windows[i].Name == window_name)
+                    return false;
+            return true;
+        }
 
         private void ButtonOpenTermsDictionary_Click(object sender, RoutedEventArgs e)
         {
@@ -250,9 +269,54 @@ namespace PCS_Forms
                     this.Close();
         }
 
-        
+        private void ReloadMethod()
+        {
+            int method_index =this.ComboBoxMethod.SelectedIndex;
+            this.SetEmptyInputContols(this.TestDataGrid);
+            this.SetEmptyInputContols(this.TestedDataGrid);
+            this.ComboBoxMethod.SelectedIndex = method_index;
+            this.Analyse = null;
+            this.Analyse = new AnalyseData(LoadDataAs.NewTesting);
+        }
 
+        private void SetEmptyInputContols(Grid grid)
+        {
+            foreach (Control item in grid.Children)
+            {
+                TextBox textbox = item as TextBox;
+                if (textbox != null)
+                    textbox.Text = string.Empty;
 
-        
+                else
+                {
+                    ComboBox combobox = item as ComboBox;
+                    if (combobox != null)
+                        combobox.SelectedIndex = -1;
+                    else
+                    {
+                        DatePicker datepicker = item as DatePicker;
+                        if (datepicker != null)
+                            datepicker.Text = string.Empty;
+                    }
+                }
+            }
+        }
+
+        private void ButtoClearResults_Click(object sender, RoutedEventArgs e)
+        {
+            this.ReloadMethod();
+        }
+
+        private void ButtonSaveResults_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.StartIterpretation(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
     }
 }
