@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows;
 namespace PCS_Forms.Controls
 {
     using System.Windows;
@@ -19,6 +20,12 @@ namespace PCS_Forms.Controls
         {
             wrappanel.AddElement(element);
             
+        }
+
+        public void WrapPanelAlignment(HorizontalAlignment horizontal,VerticalAlignment vertical)
+        {
+            this.wrappanel.HorizontalAlignment = horizontal;
+            this.wrappanel.VerticalAlignment = vertical;
         }
     }
 }

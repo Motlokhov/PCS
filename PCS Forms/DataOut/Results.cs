@@ -4,20 +4,13 @@ using System.Collections.Generic;
 namespace PCS_Forms.DataOut
 {
     using Database;
-    public enum WhereAreDataFrom { App, DataBase }
-    class Results
+    using System;
+    public class Results
     {
-        public bool AreResultsSave { get; private set; }
         List<DataResult> DataResults;
-        WhereAreDataFrom DataFrom;
-
-        public Results(WhereAreDataFrom dataFrom)
+        public Results()
         {
-            this.DataFrom = dataFrom;
-            if (this.DataFrom == WhereAreDataFrom.App)
-                AreResultsSave = false;
-            if (this.DataFrom == WhereAreDataFrom.DataBase)
-                AreResultsSave = true;
+            this.DataResults = new List<DataResult>();
         }
 
         public void AddResult(DataResult dataresult)
@@ -28,36 +21,40 @@ namespace PCS_Forms.DataOut
         public void SaveResults(AnalyseData analyseData)
         {
             int id =this.SaveDataTested(analyseData);
+            
             this.SaveResultsTested(id);
         }
 
         private void SaveResultsTested(int id)
         {
             Database database = new Database();
-            foreach (DataResult data in DataResults)
-                database.ExecuteScalar("INSERT INTO ResultsTested (Tested,Value,Meaning) VALUES (" + id + "," + data.Id + "," + data.Meaning + ")");
+            foreach (DataResult value in DataResults)
+                database.ExecuteScalar("INSERT INTO ResultsTested (Tested,Value,Meaning) VALUES (" + id + "," + value.Id + ",'" + value.Meaning + "')");
         }
 
         private int SaveDataTested(AnalyseData analyseData)
         {
             string commandstring = "INSERT INTO DataTested ";
-            commandstring += "(TestedName,TestedSurname,TestedLastname,";
-            commandstring += "PsyName,PsySurname,PsyLastname,";
-            commandstring += "Education,Family,Detained,Defect,Suicide) ";
-            commandstring += "VALUES (" + analyseData.Student.Name + ",";
-            commandstring += analyseData.Student.Surname + ",";
-            commandstring += analyseData.Student.Lastname + ",";
-            commandstring += analyseData.Psychologist.Name + ",";
-            commandstring += analyseData.Psychologist.Surname + ",";
-            commandstring += analyseData.Psychologist.Lastname + ",";
-            commandstring += (byte)analyseData.Student.Background.Education + ",";
-            commandstring += (byte)analyseData.Student.Background.Family + ",";
-            commandstring += (byte)analyseData.Student.Background.Detained + ",";
-            commandstring += (byte)analyseData.Student.Background.Defect + ",";
-            commandstring += (byte)analyseData.Student.Background.Suicide + ")";
+            commandstring += "(Name,Surname,Lastname,";
+            commandstring += "Psychologist,";
+            commandstring += "Education,Family,Detained,Defect,Suicide,Methodology,Date) ";
+            commandstring += "VALUES ('" + analyseData.Student.Name + "','";
+            commandstring += analyseData.Student.Surname + "','";
+            commandstring += analyseData.Student.Lastname + "',";
+            commandstring += analyseData.Psychologist.Id + ",";
+            commandstring += Convert.ToByte(analyseData.Student.Background.Education) + ",";
+            commandstring += Convert.ToByte(analyseData.Student.Background.Family) + ",";
+            commandstring += Convert.ToByte(analyseData.Student.Background.Detained) + ",";
+            commandstring += Convert.ToByte(analyseData.Student.Background.Defect) + ",";
+            commandstring += Convert.ToByte(analyseData.Student.Background.Suicide) + ",";
+            commandstring += analyseData.Methodology.Id + ",'";
+            commandstring+= analyseData.DateTesting.Date.ToShortDateString()+"')";
 
             Database database = new Database();
-            int id =(int)database.ExecuteScalar(commandstring);
+            database.ExecuteScalar(commandstring);
+            database.ReadData("SELECT Id FROM DataTested ORDER BY Id DESC");
+            database.Reader.Read();
+            int id = Convert.ToInt32(database.Reader["Id"]);
             return id;
         }
     }

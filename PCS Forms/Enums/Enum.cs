@@ -20,7 +20,7 @@ namespace PCS_Forms
                 if(ValueOf((Enum)Enum.Parse(enum_type,name)).Equals(value))
                     return Enum.Parse(enum_type,name);
             }
-            throw new ArgumentException("Строка не описана или не задано.");
+            throw new ArgumentException("Строка не описана или не задана.");
         }
 
         public static string[] CollectionValueOf(Type enum_type)
@@ -136,7 +136,7 @@ namespace PCS_Forms
     public enum RuleInterpretationParameter {none,single, group}
 
     /// <summary>
-    /// Тив интерпретируемого параметра
+    /// Тип интерпретируемого параметра
     /// </summary>
     public enum TypeOfValue { numerical, str }
 
@@ -144,4 +144,9 @@ namespace PCS_Forms
     /// Тип вывода интерпритации теста
     /// </summary>
     public enum ReportType { asString, asChart }
+
+    /// <summary>
+    /// Как происходит загрузка данных
+    /// </summary>
+    public enum LoadDataAs { PastTesting, NewTesting }
 }

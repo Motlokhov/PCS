@@ -5,21 +5,26 @@ using PCS_Forms.Controls;
 
 namespace PCS_Forms.Core
 {
+    using Database;
+    using System.Windows.Input;
    public class Value
     {
         public int Id { get; private set; }
         public string Meaning { get; private set; }
         public string Limitation { get; private set; }
         public TypeOfValue Type { get; private set; }
+        public bool IsSumFromOtherValues { get; private set; }
+
         public delegate void ValueChange(string value);
         public event ValueChange ValueChanged;
 
-        public Value(string limitation,TypeOfValue type,int id)
+        public Value(int id,string limitation,TypeOfValue type,bool isSum)
         {
             this.Limitation = limitation;
             this.Type = type;
             this.Id = id;
-
+            this.IsSumFromOtherValues = isSum;
+            this.Meaning = string.Empty;
         }
 
         public void SetValue(string value)
@@ -39,6 +44,8 @@ namespace PCS_Forms.Core
                     this.SetAsString(value);
                 }
             }
+            else
+                this.Meaning = string.Empty;
         }
 
         private void SetAsNumerical(string value, byte numericalLimitation)
@@ -46,15 +53,18 @@ namespace PCS_Forms.Core
             byte numericalValue;
             if (byte.TryParse(value, out numericalValue))
             {
-                if (numericalValue != Convert.ToByte(this.Meaning))
+                if (value != this.Meaning)
                 {
                     if (numericalValue > numericalLimitation)
+                    {
+                        this.Meaning = string.Empty;
                         throw new Exception("Значение должно быть числом в пределе от 0 до " + this.Limitation);
-                    else
+                    }
                         this.Meaning = value;
-                    if (this.ValueChanged != null)
-                        this.ValueChanged(this.Meaning);
+                        if (this.ValueChanged != null)
+                            this.ValueChanged(this.Meaning);
                 }
+                
             }
             else
                 throw new Exception("Значение должно быть числом в пределе от 0 до " + this.Limitation);
@@ -73,20 +83,10 @@ namespace PCS_Forms.Core
                 }
                 if (!isEquals)
                 {
-                    string messageException = "Значение должно быть одним из символов {";
-                    string LimitChars = string.Empty;
-                    for (byte c = 0; c < Limitation.Length; c++)
-                    {
-                        LimitChars += Limitation[c];
-                        if (c + 1 < Limitation.Length)
-                            LimitChars += ",";
-                    }
-                    messageException += LimitChars + "}";
-                    this.Meaning = string.Empty;
-                    if (this.ValueChanged != null)
-                        this.ValueChanged(this.Meaning);
-                    throw new Exception(messageException);
+                    this.MessageExeptionForString();
                 }
+                else if (value.Length > 1)
+                    this.MessageExeptionForString();
                 else
                 {
                     this.Meaning = value;
@@ -99,14 +99,25 @@ namespace PCS_Forms.Core
         public void CreateTextBox(MyWrapPanel wrapPanel)
         {
             MyTextBox textbox = new MyTextBox();
-            textbox.TextChanged += textbox_TextChanged;
+            if (IsSumFromOtherValues)
+            {
+                this.ValueChanged += textbox.ValueChanged;
+                textbox.IsEnabled = false;
+            }
+            else
+            {
+                textbox.TextChanged += textbox_TextChanged;
+            }
             wrapPanel.AddElement(textbox);
         }
+
+        
 
         void textbox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             MyTextBox textbox = sender as MyTextBox;
             if (textbox != null)
+            {
                 try
                 {
                     this.SetValue(textbox.Text);
@@ -116,6 +127,34 @@ namespace PCS_Forms.Core
                     MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK);
                     textbox.Text = string.Empty;
                 }
+            }
+        }
+
+       
+
+        private void MessageExeptionForString()
+        {
+            string messageException = "Значение должно быть только одним из символов {";
+            string LimitChars = string.Empty;
+            for (byte c = 0; c < Limitation.Length; c++)
+            {
+                LimitChars += Limitation[c];
+                if (c + 1 < Limitation.Length)
+                    LimitChars += ",";
+            }
+            messageException += LimitChars + "}";
+            this.Meaning = string.Empty;
+            if (this.ValueChanged != null)
+                this.ValueChanged(this.Meaning);
+            throw new Exception(messageException);
+        }
+
+        public void LoadDataPastTesting(int tested_id)
+        {
+            Database database = new Database();
+            database.ReadData("SELECT Meaning FROM ResultsTested WHERE Value = " + this.Id +"AND Tested = " + tested_id);
+            database.Reader.Read();
+            this.Meaning = database.Reader["Meaning"].ToString();
         }
     }
 }

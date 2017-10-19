@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCS_Forms"
         xmlns:Core="clr-namespace:Core;assembly=Core" xmlns:Controls="clr-namespace:PCS_Forms.Controls" x:Class="PCS_Forms.MainWindow"
         mc:Ignorable="d"
-        Title="Методика вычисления" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ResizeMode="CanMinimize" Width="1108" Height="667">
+        Title="Расчет результатов психологического тестирования" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ResizeMode="CanMinimize" Width="1108" Height="667" Closing="EventExit" Icon="Images/Logo.ico">
     <Grid x:Name="MainGrid" Background="#99B8F3B2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="13*"/>
@@ -85,15 +85,15 @@
                         <Label Content="Фамилия" HorizontalContentAlignment="Center" Margin="0,23,0,3" Grid.RowSpan="2"/>
                         <Label Content="Имя" Grid.Row="2" HorizontalContentAlignment="Center"/>
                         <Label Content="Отчество"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,3,0,24" Grid.RowSpan="2"   />
-                        <TextBox Grid.Column="1" TextWrapping="Wrap" x:Name="TextBoxSurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Margin="0,23,0,3" Grid.RowSpan="2"/>
-                        <TextBox x:Name="TextBoxName" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" />
-                        <TextBox Grid.Column="1"  Grid.Row="3" x:Name="TextBoxLastName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="6" Margin="0,3,0,24" Grid.RowSpan="2" />
+                        <Controls:MyTextBox Grid.Column="1" TextWrapping="Wrap" x:Name="TextBoxSurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Margin="0,23,0,3" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
+                        <Controls:MyTextBox x:Name="TextBoxName" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" Margin="0,0,0,2" />
+                        <Controls:MyTextBox Grid.Column="1"  Grid.Row="3" x:Name="TextBoxLastName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="6" Margin="0,3,0,24" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" />
                     </Grid>
                 </GroupBox>
                 <Label Content="Выбор методики" HorizontalContentAlignment="Center" Margin="0,17,0,2" Grid.RowSpan="2"/>
                 <Label Content="Дата тестирования" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Center"/>
                 <ComboBox Grid.Column="1" x:Name="ComboBoxMethod" TabIndex="0" SelectionChanged="ComboBoxMethod_SelectionChanged" Margin="0,17,0,2" Grid.RowSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                <DatePicker Name="DatePickerTesting" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" Background="White" />
+                <DatePicker Name="DatePickerTesting" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" Background="White" FirstDayOfWeek="Monday" SelectedDateFormat="Short" />
                 <GroupBox Header="Психолог"  Grid.Row="4"  Grid.ColumnSpan="3" BorderBrush="#FF0C151B" >
                     <Grid Name="PsyDataGrid">
                         <Grid.ColumnDefinitions>
@@ -107,9 +107,9 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBox Grid.Column="1" Name="TextBoxPsySurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="1" Margin="0,22,0,3" Grid.RowSpan="2" />
-                        <TextBox Grid.Row="2" Grid.Column="1" Name="TextBoxPsyName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="2"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxPsyLastname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" Margin="0,4,0,21" Grid.RowSpan="2"/>
+                        <TextBox Grid.Column="1" Name="TextBoxPsySurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="1" Margin="0,22,0,3" Grid.RowSpan="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="TextBoxPsyName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxPsyLastname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" Margin="0,4,0,21" Grid.RowSpan="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
                         <Label Content="Фамилия" HorizontalContentAlignment="Center" Margin="0,22,0,3" Grid.RowSpan="2"/>
                         <Label Grid.Row="2" Content="Имя" HorizontalContentAlignment="Center"></Label>
                         <Label Grid.Row="3" Content="Отчество" HorizontalContentAlignment="Center" Margin="0,4,0,21" Grid.RowSpan="2"></Label>
@@ -120,15 +120,15 @@
         </GroupBox>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="9" Height="20" VerticalAlignment="Top">
             <MenuItem Header="Файл" Margin="5,0,0,0">
-                <MenuItem Name="MenuItemExit" Header="Выход" Click="EventExit"></MenuItem>
+                <MenuItem Name="MenuItemExit" Header="Выход" Click="ButtonClose_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Тестирование">
-                <MenuItem Name="MenuItemStartInterpretation" Header="Получить характеристику" Click="ButtonStartInterpretation_Click"></MenuItem>
-                <MenuItem Header="Результаты прошлых тестирований"/>
-                <MenuItem Header="Словарь терминов"/>
+                <MenuItem Name="MenuItemStartInterpretation" Header="Получить характеристику" Click="ButtonStartInterpretation_Click"/>
+                <MenuItem Header="Результаты прошлых тестирований" Click="ButtonLastResults_Click"/>
+                <MenuItem Header="Словарь терминов" Click="ButtonOpenTermsDictionary_Click"/>
             </MenuItem>
             <MenuItem Header="Управление">
-                
+                <MenuItem Header="Cбросить текущего пользователя" Click="ButtonSetAccountAsUnactive"/>
             </MenuItem>
             <MenuItem Header="Справка">
                 <MenuItem Header="О нас"/>

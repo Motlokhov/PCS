@@ -6,6 +6,7 @@ namespace PCS_Forms.Core
     using Controls;
     using System.Collections.Generic;
     using PCS_Forms.DataOut;
+
    public class Methodology
     {
         public int Id { get; private set; }
@@ -17,7 +18,6 @@ namespace PCS_Forms.Core
         public Methodology(Method method)
         {
             this.Method = method;
-
             this.ReadMyData();
             this.AddTests();
         }
@@ -32,6 +32,7 @@ namespace PCS_Forms.Core
             this.Tests = new Test[this.CountTest];
             database.ConnectionClose();
         }
+
 
         private void AddTests()
         {

@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using PCS_Forms.Core;
+using PCS_Forms.DataOut;
 
 namespace PCS_Forms.Windows
 {
@@ -19,9 +12,85 @@ namespace PCS_Forms.Windows
     /// </summary>
     public partial class ResultsWindow : Window
     {
+        AnalyseData analyse;
         public ResultsWindow()
         {
             InitializeComponent();
+        }
+
+        public void WriteResults(AnalyseData analyse)
+        {
+            this.analyse = analyse;
+            this.AddHeader( analyse.Methodology.Method, analyse.DateTesting);
+            this.AddPsychologist(analyse.Psychologist);
+            this.AddTested(analyse.Student);
+            this.AddCalculatingResults(analyse.ListReportData);
+            this.Show();
+        }
+
+        private void AddHeader(Method method, System.DateTime dateTime)
+        {
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Методика: " + method.ToString(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Дата тестирования: " + dateTime.ToString("d"),FontWeights.Bold));
+            this.ResultsList.Document.Blocks.LastBlock.BorderThickness = new Thickness(0,0,0,10);
+        }
+
+        private void AddTested(Student student)
+        {
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Тестируемый: " + student.ReturnFullName(), FontWeights.Bold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Образование: " + student.ValueOfEducation(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Особенности: " + student.ValueOfDefect(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Состав семьи: " + student.ValueOfFamily(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Приводы: " + student.ValueOfDetained(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Суицид: " + student.ValueOfSuicide(), FontWeights.SemiBold));
+            this.ResultsList.Document.Blocks.LastBlock.BorderThickness = new Thickness(0, 0, 0, 5);
+        }
+
+
+        private void AddPsychologist(Psychologist psychologist)
+        {
+            this.ResultsList.Document.Blocks.Add(this.AddParagraph("Тестирование провел: " + psychologist.ReturnFullName(), FontWeights.Bold));
+            this.ResultsList.Document.Blocks.LastBlock.BorderThickness = new Thickness(0, 0, 0, 5);
+        }
+
+        private void AddCalculatingResults(List<ReportData> listRepData)
+        {
+            foreach (ReportData report in listRepData)
+            {
+                this.ResultsList.Document.Blocks.Add(this.AddParagraph(report.TestName, FontWeights.Bold));
+                foreach (string data in report.Data)
+                {
+                    if (!string.IsNullOrEmpty(data))
+                        this.ResultsList.Document.Blocks.Add(this.AddParagraph(data, FontWeights.Normal));
+                }
+            }
+        }
+
+        private Paragraph AddParagraph(string text, FontWeight fontweights)
+        {
+            Paragraph paragraph = new Paragraph();
+            paragraph.Inlines.Add(new Run(text));
+            paragraph.FontWeight = fontweights;
+            return paragraph;
+        }
+
+        private void ButtonWord_Click(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                Report report = new Report(analyse);
+                this.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ButtonExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

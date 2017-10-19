@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PCS_Forms.Controls
@@ -27,7 +28,7 @@ namespace PCS_Forms.Controls
             this.ColumnDefinitions.Add(new ColumnDefinition());
         }
 
-        public  void AddControl( System.Windows.UIElement control, int row, int column,int rowspan,int colspan)
+        public  void AddControl( FrameworkElement control, int row, int column,int rowspan,int colspan)
         {
             this.Children.Add(control);
             Grid.SetRow(control, row);
@@ -35,6 +36,14 @@ namespace PCS_Forms.Controls
             Grid.SetColumnSpan(control, colspan);
             Grid.SetRowSpan(control, rowspan);
             
+        }
+
+        public void AddControl(FrameworkElement control,int width,int height,Thickness margin)
+        {
+            this.Children.Add(control);
+            control.Width = width;
+            control.Height = height;
+            control.Margin = margin;
         }
     }
 }

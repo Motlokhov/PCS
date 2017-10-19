@@ -15,8 +15,7 @@ namespace PCS_Forms.Core
         public TypeOfValue Type { get; private set; }
         public Value[] Values { get; private set; }
         public string Limitation { get; private set; }
-        public bool IsSumOtherParameters { get; private set; }
-
+       
         public Parameter(int id)
         {
             this.Id = id;
@@ -27,14 +26,17 @@ namespace PCS_Forms.Core
         private void AddValues()
         {
             Database database = new Database();
-            database.ReadData("SELECT Id FROM Value WHERE Parameter =" + this.Id);
-            
+            database.ReadData("SELECT Id,IsSumFromOtherValues FROM Value WHERE Parameter =" + this.Id);
             for (int i = 0; i < Values.Length; i++)
             {
                 database.Reader.Read();
-                Values[i] = new Value(this.Limitation, this.Type,(int)database.Reader["Id"]);
+                bool isSum = Convert.ToBoolean(database.Reader["isSumFromOtherValues"]);
+                int id =(int)database.Reader["Id"];
+                Values[i] = new Value(id,this.Limitation, this.Type,isSum);
             }
         }
+
+        
 
         private void ReadMyData()
         {
@@ -73,9 +75,12 @@ namespace PCS_Forms.Core
             byte count = Convert.ToByte(this.CountValues / 2);
             for (int i = 0; i < count; i++)
             {
+                
                 firstGroupValue += this.Values[i].Meaning;
                 secondGroupValue += this.Values[i + count].Meaning;
             }
+            if (string.IsNullOrEmpty(firstGroupValue.ToString()) || string.IsNullOrEmpty(secondGroupValue.ToString()))
+                throw new Exception("Не все поля заполнены");
             ReportData repdata = new ReportData();
             Database database = new Database();
             database.ReadData("SELECT FirstValue,SecondValue,Definition FROM Interpretation WHERE Parameter = " + this.Id);
@@ -85,8 +90,8 @@ namespace PCS_Forms.Core
                 object secondvalue =database.Reader["SecondValue"];
                 if (this.Type == TypeOfValue.numerical)
                 {
-                    if (Convert.ToByte(firstGroupValue) < Convert.ToByte(firstvalue) | firstGroupValue == firstvalue)
-                        if (Convert.ToByte(secondGroupValue) < Convert.ToByte(secondvalue) | secondGroupValue == secondvalue)
+                    if (Convert.ToByte(firstGroupValue) < Convert.ToByte(firstvalue) || firstGroupValue.ToString() == firstvalue.ToString())
+                        if (Convert.ToByte(secondGroupValue) < Convert.ToByte(secondvalue) || secondGroupValue.ToString() == secondvalue.ToString())
                         {
                             return (string)database.Reader["Definition"];
                         }
@@ -135,25 +140,35 @@ namespace PCS_Forms.Core
 
         private string InterpretateAsNone()
         {
-            return Values[0].Meaning;
+            string val = Values[0].Meaning;
+            if (string.IsNullOrEmpty(val))
+                throw new Exception("Не все поля заполнены");
+            else
+                return val;
         }
 
         private string GetValues()
         {
             string val=string.Empty;
             foreach (Value value in Values)
+            {
+                if (string.IsNullOrEmpty(value.Meaning))
+                    throw new Exception("Не все поля заполнены");
                 val += value.Meaning;
+            }
             return val;
         }
 
         public void CreateWrapPanel(MyGroupBox groupbox)
         {
             MyWrapPanel wrappanel = new MyWrapPanel();
-            wrappanel.ItemHeight = 25;
+            wrappanel.ItemHeight = 28;
             wrappanel.ItemWidth = 65;
             wrappanel.ToolTip = this.Name + " (Лимит значения: " + this.Limitation+")";
             foreach (Value value in Values)
+            {
                 value.CreateTextBox(wrappanel);
+            }
             groupbox.AddElement(wrappanel);
 
         }

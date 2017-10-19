@@ -3,36 +3,47 @@ using System.Collections.Generic;
 namespace PCS_Forms.Core
 {
     using Controls;
-    using Microsoft.Office.Interop.Word;
     using DataOut;
     using Database;
+    using System.Windows;
+
     public class AnalyseData
     {
-        public Person Psychologist { get; private set; }
+        public Psychologist Psychologist { get; private set; }
         public Student Student { get; private set; }
         public Methodology Methodology { get; private set; }
         public DateTime DateTesting { get; private set; }
-        Report Report;
-        Results Results;
+        public Report Report { get; private set; }
+        public Results Results { get; private set; }
+        public List<ReportData> ListReportData { get; private set; }
+        public LoadDataAs LoadDataAs { get; private set; }
 
-        public AnalyseData(Method method)
+        public AnalyseData(LoadDataAs load_data_as)
         {
-            Methodology = new Methodology(method);
-            //this.Psychologist = psychologis;
-            //this.Student = student;
-            //this.Methodology = methodology;
-            //this.DateTesting = date;
-            //this.SaveResults();
-            //this.WriteToWord();
-            //this.Report.Dispose();
+            this.LoadDataAs = load_data_as;
         }
+
+
+        public void OpenDocument()
+        {
+            this.Report = new Report();
+        }
+
+        public void CreateMethodology(Method method)
+        {
+            this.Methodology = new Methodology(method);
+            if (this.LoadDataAs == PCS_Forms.LoadDataAs.PastTesting)
+                this.LoadDataPastTesting();
+        }
+
+       
 
         public void SetStudent(Student student)
         {
             this.Student = student;
         }
 
-        public void SetPsychologist(Person psy)
+        public void SetPsychologist(Psychologist psy)
         {
             this.Psychologist = psy;
         }
@@ -44,13 +55,38 @@ namespace PCS_Forms.Core
 
         public void StartInterpretation()
         {
-            this.Report = new Report(this.Methodology.StartInterpretation());
-            this.Report.WriteToWord(this);
+
+            try
+            {
+                this.ListReportData = new List<ReportData>(this.Methodology.StartInterpretation());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Ошибка!",MessageBoxButton.OK,MessageBoxImage.Error);
+                this.ListReportData = null;
+            }
+            
         }
 
-        
+        public void SaveResults()
+        {
+            
+             this.Results =new Results();
+            foreach (Test test in this.Methodology.Tests)
+                foreach (Parameter parameter in test.Parameters)
+                    foreach (Value value in parameter.Values)
+                        Results.AddResult(new DataResult(value.Id, value.Meaning));
+            this.Results.SaveResults(this);
+        }
 
-        
+        private void LoadDataPastTesting()
+        {
+            foreach (Test test in Methodology.Tests)
+                foreach (Parameter parameter in test.Parameters)
+                    foreach (Value value in parameter.Values)
+                        value.LoadDataPastTesting(this.Student.Id);
+                        
+        }
     }
 
     

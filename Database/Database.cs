@@ -32,11 +32,13 @@ namespace Database
 
         public int ExecuteNonQuery(string command_text)
         {
+            this.command.CommandText = command_text;
             return command.ExecuteNonQuery();
         }
 
         public object ExecuteScalar(string command_text)
         {
+            this.command.CommandText = command_text;
             return command.ExecuteScalar();
         }
 

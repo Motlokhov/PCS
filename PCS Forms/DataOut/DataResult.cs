@@ -2,7 +2,7 @@
 
 namespace PCS_Forms.DataOut
 {
-    class DataResult
+   public class DataResult
     {
         public int Id { get; private set; }
         public string Meaning { get; private set; }
