@@ -7,15 +7,17 @@ namespace PCS_Forms.DataOut
     using System;
     public class Results
     {
-        List<DataResult> DataResults;
+        public string Name { get; private set; }
+
+        private List<DataResult> _dataResults;
         public Results()
         {
-            this.DataResults = new List<DataResult>();
+            this._dataResults = new List<DataResult>();
         }
 
         public void AddResult(DataResult dataresult)
         {
-            this.DataResults.Add(dataresult);
+            this._dataResults.Add(dataresult);
         }
 
         public void SaveResults(AnalyseData analyseData)
@@ -28,7 +30,7 @@ namespace PCS_Forms.DataOut
         private void SaveResultsTested(int id)
         {
             Database database = new Database();
-            foreach (DataResult value in DataResults)
+            foreach (DataResult value in _dataResults)
                 database.ExecuteScalar("INSERT INTO ResultsTested (Tested,Value,Meaning) VALUES (" + id + "," + value.Id + ",'" + value.Meaning + "')");
         }
 

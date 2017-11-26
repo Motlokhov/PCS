@@ -11,7 +11,6 @@ namespace PCS_Forms.DataOut
        Microsoft.Office.Interop.Word.Application WordApp;
         Document WordDoc;
         Range Range;
-        Microsoft.Office.Interop.Excel.Workbook workbook;
 
         public Report(AnalyseData analyse)
         {
@@ -38,7 +37,6 @@ namespace PCS_Forms.DataOut
 
         public void Dispose()
         {
-            this.workbook.Close(null, null, null);
             this.WordApp = null;
             this.WordDoc = null;
             this.Range = null;
@@ -142,23 +140,29 @@ namespace PCS_Forms.DataOut
         {
             foreach (ReportData report_data in list_report_data)
             {
-                if (report_data.ReportType == ReportType.asString)
+                if (report_data.Type == ReportType.asString)
                 {
                     foreach (string data in report_data.Data)
                         if (data != string.Empty)
                             this.AddRange(data, 0, WdParagraphAlignment.wdAlignParagraphJustify);
                 }
-                if (report_data.ReportType == ReportType.asChart)
+                if (report_data.Type == ReportType.asChart)
                 {
-                    try
-                    {
-                        this.workbook = AddDiagram(report_data);
+                    string values = string.Empty;
+                    foreach (string value in report_data.Data)
+                        values += value + " ";
+                    if (!string.IsNullOrEmpty(values))
+                        this.AddRange(values, 0, WdParagraphAlignment.wdAlignParagraphJustify);
+                    // Возникает исключение hresult при вставке графика
+                    //try
+                    //{
+                    //    this.workbook = AddDiagram(report_data);
                         
-                    }
-                    catch
-                    {
-                        this.Dispose();
-                    }
+                    //}
+                    //catch
+                    //{
+                    //    this.Dispose();
+                    //}
                 }
             }
             this.AddRange(string.Empty);

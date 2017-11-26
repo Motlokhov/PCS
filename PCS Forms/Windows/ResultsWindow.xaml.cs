@@ -55,15 +55,27 @@ namespace PCS_Forms.Windows
 
         private void AddCalculatingResults(List<ReportData> listRepData)
         {
-            foreach (ReportData report in listRepData)
+            foreach (ReportData report_data in listRepData)
             {
-                this.ResultsList.Document.Blocks.Add(this.AddParagraph(report.TestName, FontWeights.Bold));
-                foreach (string data in report.Data)
+                if (report_data.Type == ReportType.asChart)
                 {
-                    if (!string.IsNullOrEmpty(data))
-                        this.ResultsList.Document.Blocks.Add(this.AddParagraph(data, FontWeights.Normal));
+                    AddChart(report_data);
+                }
+                if (report_data.Type == ReportType.asString)
+                {
+                    this.ResultsList.Document.Blocks.Add(this.AddParagraph(report_data.TestName, FontWeights.Bold));
+                    foreach (string data in report_data.Data)
+                    {
+                        if (!string.IsNullOrEmpty(data))
+                            this.ResultsList.Document.Blocks.Add(this.AddParagraph(data, FontWeights.Normal));
+                    }
                 }
             }
+        }
+
+        private void AddChart(ReportData report_data)
+        {
+
         }
 
         private Paragraph AddParagraph(string text, FontWeight fontweights)

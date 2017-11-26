@@ -99,8 +99,8 @@ namespace PCS_Forms
         speech,
         [DescriptionAttribute("Тело")]
         body,
-        [DescriptionAttribute("Оба")]
-        both
+        [DescriptionAttribute("Речь и тело")]
+        speechAndBody
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ namespace PCS_Forms
     {
         [DescriptionAttribute("Нет")]
         no,
-        [DescriptionAttribute("Да")]
+        [DescriptionAttribute("Были")]
         yes,
         [DescriptionAttribute("Пытался сам")]
         try_itself

@@ -6,7 +6,7 @@ namespace PCS_Forms.DataOut
     {
         public string TestName { get; private set; }
         public List<string> Data { get; private set; }
-        public ReportType ReportType { get; private set; }
+        public ReportType Type { get; private set; }
 
         public ReportData()
         {
@@ -25,7 +25,7 @@ namespace PCS_Forms.DataOut
 
         public void SetReportType(ReportType type)
         {
-            this.ReportType = type;
+            this.Type = type;
         }
     }
 }
