@@ -66,30 +66,30 @@ namespace PCS_Forms.DataOut
             this.WordApp.Visible = visible;
         }
 
-        public Microsoft.Office.Interop.Excel.Workbook AddDiagram(ReportData repData)
-        {
-            Microsoft.Office.Interop.Word.Chart wdChart = this.WordDoc.Shapes.AddChart2(227, Microsoft.Office.Core.XlChartType.xlLine).Chart;
-            Microsoft.Office.Interop.Word.ChartData chartData = wdChart.ChartData;
-            WrapFormat wrapformat = (WrapFormat)this.WordDoc.Shapes[1].WrapFormat;
-            wrapformat.Type = WdWrapType.wdWrapTopBottom;
-            this.WordDoc.Shapes[1].Top = 10;
-            this.WordDoc.Shapes[1].TopRelative = 1000;
+        //public Microsoft.Office.Interop.Excel.Workbook AddDiagram(ReportData repData)
+        //{
+            //Microsoft.Office.Interop.Word.Chart wdChart = this.WordDoc.Shapes.AddChart2(227, Microsoft.Office.Core.XlChartType.xlLine).Chart;
+            //Microsoft.Office.Interop.Word.ChartData chartData = wdChart.ChartData;
+            //WrapFormat wrapformat = (WrapFormat)this.WordDoc.Shapes[1].WrapFormat;
+            //wrapformat.Type = WdWrapType.wdWrapTopBottom;
+            //this.WordDoc.Shapes[1].Top = 10;
+            //this.WordDoc.Shapes[1].TopRelative = 1000;
 
             
-            Microsoft.Office.Interop.Excel.Workbook dataWorkBook = (Microsoft.Office.Interop.Excel.Workbook)chartData.Workbook;
-            Microsoft.Office.Interop.Excel.Worksheet dataSheet = (Microsoft.Office.Interop.Excel.Worksheet)dataWorkBook.Worksheets[1];
-            Microsoft.Office.Interop.Excel.Range tRange = (Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A1", "B7");
-            Microsoft.Office.Interop.Excel.ListObject tbl1 = dataSheet.ListObjects[1];
-            tbl1.Resize(tRange);   
-            for (byte i = 0; i < repData.Data.Count; i++)
-            {
-                ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A" + (i+2))).FormulaR1C1 = "Квадрат № " + (i + 1);
-                ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B" + (i+2))).FormulaR1C1 = repData.Data[i];
-            }
-            ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B1")).FormulaR1C1= "Время";
+            //Microsoft.Office.Interop.Excel.Workbook dataWorkBook = (Microsoft.Office.Interop.Excel.Workbook)chartData.Workbook;
+            //Microsoft.Office.Interop.Excel.Worksheet dataSheet = (Microsoft.Office.Interop.Excel.Worksheet)dataWorkBook.Worksheets[1];
+            //Microsoft.Office.Interop.Excel.Range tRange = (Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A1", "B7");
+            //Microsoft.Office.Interop.Excel.ListObject tbl1 = dataSheet.ListObjects[1];
+            //tbl1.Resize(tRange);   
+            //for (byte i = 0; i < repData.Data.Count; i++)
+            //{
+            //    ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A" + (i+2))).FormulaR1C1 = "Квадрат № " + (i + 1);
+            //    ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B" + (i+2))).FormulaR1C1 = repData.Data[i];
+            //}
+            //((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B1")).FormulaR1C1= "Время";
 
-            return dataWorkBook;
-        }
+            //return dataWorkBook;
+        //}
 
         private string GetCharExcel(byte number)
         {
