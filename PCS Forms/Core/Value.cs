@@ -113,7 +113,7 @@ namespace PCS_Forms.Core
 
         
 
-        void textbox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void textbox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             MyTextBox textbox = sender as MyTextBox;
             if (textbox != null)

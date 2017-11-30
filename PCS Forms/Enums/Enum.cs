@@ -5,9 +5,9 @@ namespace PCS_Forms
 {
     public static class EnumUtils
     {
-        public static string ValueOf(Enum value)
+        public static string ValueOf(Enum e)
         {
-            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            FieldInfo fieldInfo = e.GetType().GetField(e.ToString());
             DescriptionAttribute attribute = (DescriptionAttribute)fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute));
             return attribute.Description;
         }

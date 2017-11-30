@@ -22,6 +22,22 @@ namespace PCS_Forms.Core
             this.AddTests();
         }
 
+        public MyTabitem AddTabItem()
+        {
+            MyTabitem Tabitem = new MyTabitem();
+            foreach (Test test in Tests)
+                test.AddGroupBox(Tabitem);
+            return Tabitem;
+        }
+
+        public List<ReportData> Interpretation()
+        {
+            List<ReportData> listrepdata = new List<ReportData>();
+            foreach (Test test in Tests)
+                listrepdata.Add(test.Interpretation());
+            return listrepdata;
+        }
+
         private void ReadMyData()
         {
             Database database = new Database();
@@ -48,22 +64,5 @@ namespace PCS_Forms.Core
             database.ConnectionClose();
         }
 
-        public MyTabitem AddTabItem()
-        {
-            MyTabitem Tabitem = new MyTabitem();
-            foreach (Test test in Tests)
-                test.AddGroupBox(Tabitem);
-            return Tabitem;
-        }
-
-        public List<ReportData> Interpretation()
-        {
-            List<ReportData> listrepdata = new List<ReportData>();
-            foreach (Test test in Tests)
-                listrepdata.Add(test.Interpretation());
-            return listrepdata;
-        }
-
-        
     }
 }

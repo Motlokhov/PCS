@@ -8,104 +8,56 @@ namespace PCS_Forms.DataOut
 {
    public class Report:IDisposable
     {
-       Microsoft.Office.Interop.Word.Application WordApp;
-        Document WordDoc;
-        Range Range;
+        private Microsoft.Office.Interop.Word.Application _wordApp;
+        private Document _wordDoc;
+        private Range _range;
 
         public Report(AnalyseData analyse)
         {
-            this.WordApp =new Application();
-            this.WordDoc = this.WordApp.Documents.Add(Type.Missing);
-            this.WordApp.DocumentBeforeClose+=WordApp_DocumentBeforeClose;
+            this._wordApp = new Application();
+            this._wordDoc = this._wordApp.Documents.Add(Type.Missing);
             this.WriteToWord(analyse);
-            
+
         }
 
         public Report()
         {
-            this.WordApp = new Application();
+            this._wordApp = new Application();
             string path = @Directory.GetCurrentDirectory() + @"\Files\Dictionary.docx";
-            this.WordDoc = this.WordApp.Documents.Open(path);
+            this._wordDoc = this._wordApp.Documents.Open(path);
             this.WordAddVisible(true);
-        }
-
-        private void WordApp_DocumentBeforeClose(Document Doc, ref bool Cancel)
-        {
-            this.Dispose();
-            
         }
 
         public void Dispose()
         {
-            this.WordApp = null;
-            this.WordDoc = null;
-            this.Range = null;
+            this._wordApp = null;
+            this._wordDoc = null;
+            this._range = null;
             
         }
 
         private void AddParagraph(Range range,WdParagraphAlignment alignment)
         {
-            this.WordDoc.Paragraphs.Add(range);
-            this.WordDoc.Paragraphs.Last.Alignment = alignment;
+            this._wordDoc.Paragraphs.Add(range);
+            this._wordDoc.Paragraphs.Last.Alignment = alignment;
             
         }
 
         public void AddRange(string text, int bold = 0, WdParagraphAlignment alignment = WdParagraphAlignment.wdAlignParagraphCenter)
         {
-            if (Range == null)
-                Range = WordDoc.Range(0, 0);
+            if (_range == null)
+                _range = _wordDoc.Range(0, 0);
             else
-                this.Range.Start = Range.End;   
-            this.Range.Text = text;
-            this.Range.Bold = bold;
-            this.AddParagraph(Range,alignment);
+                this._range.Start = _range.End;   
+            this._range.Text = text;
+            this._range.Bold = bold;
+            this.AddParagraph(_range,alignment);
         }
 
         public void WordAddVisible(bool visible)
         {
-            this.WordApp.Visible = visible;
+            this._wordApp.Visible = visible;
         }
-
-        //public Microsoft.Office.Interop.Excel.Workbook AddDiagram(ReportData repData)
-        //{
-            //Microsoft.Office.Interop.Word.Chart wdChart = this.WordDoc.Shapes.AddChart2(227, Microsoft.Office.Core.XlChartType.xlLine).Chart;
-            //Microsoft.Office.Interop.Word.ChartData chartData = wdChart.ChartData;
-            //WrapFormat wrapformat = (WrapFormat)this.WordDoc.Shapes[1].WrapFormat;
-            //wrapformat.Type = WdWrapType.wdWrapTopBottom;
-            //this.WordDoc.Shapes[1].Top = 10;
-            //this.WordDoc.Shapes[1].TopRelative = 1000;
-
-            
-            //Microsoft.Office.Interop.Excel.Workbook dataWorkBook = (Microsoft.Office.Interop.Excel.Workbook)chartData.Workbook;
-            //Microsoft.Office.Interop.Excel.Worksheet dataSheet = (Microsoft.Office.Interop.Excel.Worksheet)dataWorkBook.Worksheets[1];
-            //Microsoft.Office.Interop.Excel.Range tRange = (Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A1", "B7");
-            //Microsoft.Office.Interop.Excel.ListObject tbl1 = dataSheet.ListObjects[1];
-            //tbl1.Resize(tRange);   
-            //for (byte i = 0; i < repData.Data.Count; i++)
-            //{
-            //    ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("A" + (i+2))).FormulaR1C1 = "Квадрат № " + (i + 1);
-            //    ((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B" + (i+2))).FormulaR1C1 = repData.Data[i];
-            //}
-            //((Microsoft.Office.Interop.Excel.Range)dataSheet.Cells.get_Range("B1")).FormulaR1C1= "Время";
-
-            //return dataWorkBook;
-        //}
-
-        private string GetCharExcel(byte number)
-        {
-            switch (number)
-            {
-                case 1: return "A";
-                case 2: return "B";
-                case 3: return "C";
-                case 4: return "D";
-                case 5: return "E";
-                default: return "A";
-
-            }
-        }
-
-
 
         public void WriteToWord(AnalyseData analyse)
         {
@@ -153,16 +105,6 @@ namespace PCS_Forms.DataOut
                         values += value + " ";
                     if (!string.IsNullOrEmpty(values))
                         this.AddRange(values, 0, WdParagraphAlignment.wdAlignParagraphJustify);
-                    // Возникает исключение hresult при вставке графика
-                    //try
-                    //{
-                    //    this.workbook = AddDiagram(report_data);
-                        
-                    //}
-                    //catch
-                    //{
-                    //    this.Dispose();
-                    //}
                 }
             }
             this.AddRange(string.Empty);

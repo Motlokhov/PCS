@@ -4,6 +4,7 @@ namespace PCS_Forms.Controls
 {
     using System.Windows.Input;
     using System.Windows.Media;
+
     public class MyTextBox : TextBox
     {
         public MyTextBox()
@@ -15,7 +16,7 @@ namespace PCS_Forms.Controls
             this.KeyDown += textbox_KeyDown;
         }
 
-        void MyTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void MyTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if(string.IsNullOrEmpty(this.Text))
                 this.Background = Brushes.Yellow;
@@ -23,12 +24,7 @@ namespace PCS_Forms.Controls
                 this.Background = Brushes.White;
         }
 
-        private void value_ValueChanged(string value)
-        {
-            this.Text = value;   
-        }
-
-        internal void ValueChanged(string value)
+         internal void ValueChanged(string value)
         {
             this.Text = value;
         }

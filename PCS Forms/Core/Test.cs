@@ -16,7 +16,7 @@ namespace PCS_Forms.Core
         public List<Value> AllValues { get; private set; }
         public ReportType ReportType { get; private set; }
         public bool MayValueToBeRepeated { get; private set; }
-        public bool HasSumValue = false;
+        private bool HasSumValue = false;
 
 
 
@@ -61,7 +61,7 @@ namespace PCS_Forms.Core
             }
         }
 
-        void Test_ValueChanged(string value)
+      private void Test_ValueChanged(string value)
         {
             if (HasSumValue)
             {

@@ -15,11 +15,11 @@ namespace PCS_Forms.Controls
     public class MyTabitem:TabItem
     {
 
-        MyWrapPanel WrapPanel;
-        int Row = 1;
-        const  int  Column = 1;
-        const int  Rowspan = 5 ;
-        const int Columnspan = 18;
+        private MyWrapPanel _wrapPanel;
+        private int _row = 1;
+        private const  int  _column = 1;
+        private const int  _rowSpan = 5 ;
+        private const int _columnSpan = 18;
 
         public MyTabitem()
         {
@@ -28,23 +28,23 @@ namespace PCS_Forms.Controls
 
         private void CreateChild()
         {
-            this.WrapPanel =new MyWrapPanel();
-            this.WrapPanel.ItemHeight = 150;
-            this.WrapPanel.ItemWidth = 200;
+            this._wrapPanel =new MyWrapPanel();
+            this._wrapPanel.ItemHeight = 150;
+            this._wrapPanel.ItemWidth = 200;
             this.Background = Brushes.CadetBlue;
             this.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             this.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
             
-            this.AddChild(WrapPanel);
+            this.AddChild(_wrapPanel);
         }
 
 
         public void AddGroupBox(MyGroupBox childGroupBox)
         {
-            this.WrapPanel.AddElement(childGroupBox);
+            this._wrapPanel.AddElement(childGroupBox);
             childGroupBox.Margin = new Thickness(0, 40, 0, 10);
-            //this.grid.AddControl(childGroupBox, Row, Column, Rowspan, Columnspan);
-            Row += Rowspan+1;
+            //this.grid.AddControl(childGroupBox, _row, _column, _rowSpan, _columnSpan);
+            _row += _rowSpan+1;
         }
 
 

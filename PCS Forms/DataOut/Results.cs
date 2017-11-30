@@ -15,9 +15,9 @@ namespace PCS_Forms.DataOut
             this._dataResults = new List<DataResult>();
         }
 
-        public void AddResult(DataResult dataresult)
+        public void AddResult(DataResult dataResult)
         {
-            this._dataResults.Add(dataresult);
+            this._dataResults.Add(dataResult);
         }
 
         public void SaveResults(AnalyseData analyseData)

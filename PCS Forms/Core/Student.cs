@@ -10,7 +10,7 @@ namespace PCS_Forms.Core
         public string Name { get; protected set; }
         public string Surname { get; protected set; }
         public string Lastname { get; protected set; }
-        public Background Background;
+        public Background Background { get; private set; }
 
         public Student(string name,string surname,string lastname, Background background)
         {
