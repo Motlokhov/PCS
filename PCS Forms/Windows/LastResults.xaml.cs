@@ -23,11 +23,9 @@ namespace PCS_Forms.Windows
     /// </summary>
     public partial class LastResults : Window
     {
-        List<AnalyseData> ListAnalyse;
         public LastResults()
         {
             InitializeComponent();
-            ListAnalyse = new List<AnalyseData>();
             this.Show();
         }
 
@@ -42,27 +40,7 @@ namespace PCS_Forms.Windows
 
         private void LoadAllLastResults()
         {
-            Database database = new Database();
-            database.ReadData("SELECT Id,Psychologist,Methodology,Date FROM DataTested");
-            int i = 1;
-            while (database.Reader.Read())
-            {
-                AnalyseData analyse = new AnalyseData(LoadDataAs.PastTesting);
-                analyse.SetStudent(new Student((int)database.Reader["Id"]));
-                analyse.SetPsychologist(new Psychologist((int)database.Reader["Psychologist"]));
-                analyse.SetDate(Convert.ToDateTime(database.Reader["Date"]));
-                analyse.CreateMethodology((Method)Convert.ToByte(database.Reader["Methodology"]));
-                ListAnalyse.Add(analyse);
-                
-                this.DataResults.Items.Add(new DataBinding() 
-                {
-                    Number = i++,
-                    Id=analyse.Student.Id.ToString(),
-                    Tested=analyse.Student.ReturnFullName(),
-                    Method=analyse.Methodology.Method.ToString(),
-                    Date=analyse.DateTesting.ToString("d"),
-                });               
-            }
+           
             
         }
 
@@ -74,9 +52,8 @@ namespace PCS_Forms.Windows
             Button button = sender as Button;
             if (button != null)
             {
-                ListAnalyse[data.Number-1].Interpretation();
+                
                 ResultsWindow results = new ResultsWindow();
-                results.WriteResults(ListAnalyse[data.Number-1]);
                 results.Show();
             }
         }

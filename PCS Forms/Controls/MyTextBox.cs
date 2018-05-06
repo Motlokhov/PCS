@@ -10,6 +10,7 @@ namespace PCS_Forms.Controls
         public MyTextBox()
         {
             this.Margin = new System.Windows.Thickness(5, 5, 5, 5);
+            this.MinWidth = 60;
             this.TextChanged += MyTextBox_TextChanged;
             this.TextAlignment = System.Windows.TextAlignment.Center;
             this.Background = Brushes.Yellow;

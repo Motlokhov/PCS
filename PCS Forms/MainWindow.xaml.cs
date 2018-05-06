@@ -17,12 +17,14 @@ namespace PCS_Forms
     public partial class MainWindow : Window
     {
 
-        AnalyseData Analyse;
+        
         public MainWindow()
         {
             InitializeComponent();
-            Analyse = new AnalyseData(LoadDataAs.NewTesting);
+            
             this.AddEnumDataInComboBoxes();
+            this.MinWidth = 1300;
+            this.MinHeight = 768;
             this.Hide();
             this.DatePickerTesting.DisplayDateEnd = DateTime.Today;
             this.CheckHasActiveUser();
@@ -46,10 +48,10 @@ namespace PCS_Forms
 
         private void FillPsychologistTextBoxes(int id)
         {
-            this.SetPsychologist(id);
-            TextBoxPsyName.Text = this.Analyse.Psychologist.Name;
-            TextBoxPsySurname.Text = this.Analyse.Psychologist.Surname;
-            TextBoxPsyLastname.Text = this.Analyse.Psychologist.Lastname;
+            //this.SetPsychologist(id);
+            //TextBoxPsyName.Text = this.Analyse.Psychologist.Name;
+            //TextBoxPsySurname.Text = this.Analyse.Psychologist.Surname;
+            //TextBoxPsyLastname.Text = this.Analyse.Psychologist.Lastname;
         }
         
 
@@ -129,76 +131,74 @@ namespace PCS_Forms
 
         private void SaveResults()
         {
-            this.Analyse.SaveResults();
+            
         }
 
-        private void StartIterpretation(bool must_results_be_saving)
+        private void StartIterpretation(bool saveResult)
         {
             if (this.CheckAllInputControls(this.TestDataGrid))
                 if (this.CheckAllInputControls(this.PsyDataGrid))
                     if (this.CheckAllInputControls(this.TestedDataGrid))
                     {
-                        //this.Analyse = new AnalyseData(LoadDataAs.NewTesting);
-                        this.SetStudent();
-                        this.SetDate();
-                        if (must_results_be_saving)
-                            this.Analyse.InterpretationAndSave();
-                        else
-                            this.Analyse.Interpretation();
+                        
+                        //this.SetStudent();
+                        //this.SetDate();
+                        //if (saveResult)
+                        //    thisAnalyse.InterpretationAndSave();
+                        //else
+                        //    this.Analyse.Interpretation();
                     }
         }
 
         private void ShowResults()
         {
-            ResultsWindow resultsWindow;
-            if (this.Analyse.ListReportData != null)
-                if (this.CheckIsWindowOpen("ResultsWindow"))
-                {
-                    resultsWindow = new ResultsWindow();
-                    resultsWindow.WriteResults(Analyse);
-                    this.ReloadMethod();
-                }
+            //ResultsWindow resultsWindow;
+            //if (this.Analyse.ListReportData != null)
+            //    if (this.CheckIsWindowOpen("ResultsWindow"))
+            //    {
+            //        resultsWindow = new ResultsWindow();
+            //        resultsWindow.WriteResults(Analyse);
+            //        this.Reload();
+            //    }
             
         }
 
         private void SetDate()
         {
-            Analyse.SetDate((DateTime)this.DatePickerTesting.SelectedDate);
+           
         }
 
         private void SetStudent()
         {
-            Student student = new Student(TextBoxName.Text,
-                            TextBoxSurname.Text,
-                            TextBoxLastName.Text,
-                            new Background(
-                                (Education)ComboboxEducaton.SelectedIndex,
-                                (Composition_of_family)ComboboxCompositionOfFamily.SelectedIndex,
-                                (Detained)ComboboxDetained.SelectedIndex,
-                                (Defect)ComboboxDefects.SelectedIndex,
-                                (Suicide_in_family)ComboboxSuicideIfFamily.SelectedIndex));
-            Analyse.SetStudent(student);
+            //Student student = new Student(TextBoxName.Text,
+            //                TextBoxSurname.Text,
+            //                TextBoxLastName.Text,
+            //                new Background(
+            //                    (Education)ComboboxEducaton.SelectedIndex,
+            //                    (Composition_of_family)ComboboxCompositionOfFamily.SelectedIndex,
+            //                    (Detained)ComboboxDetained.SelectedIndex,
+            //                    (Defect)ComboboxDefects.SelectedIndex,
+            //                    (Suicide_in_family)ComboboxSuicideIfFamily.SelectedIndex));
+            //Analyse.SetStudent(student);
         }
 
         private void SetPsychologist(int id)
         {
-            Psychologist psy = new Psychologist(id);
-            Analyse.SetPsychologist(psy);
+            //Psychologist psy = new Psychologist(id);
+            //Analyse.SetPsychologist(psy);
         }
 
         private void ComboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MainTab.HasItems)
-                MainTab.Items.Clear();
+            MainStackPanel.Children.Clear();
+            ActiveTestStackPanel.Children.Clear();
             ComboBox combobox = sender as ComboBox;
             try
             {
                 if (combobox.SelectedIndex == -1)
                     return;
-                Analyse.CreateMethodology((Method)combobox.SelectedIndex + 1);
-                MyTabitem tabitem = Analyse.Methodology.AddTabItem();
-                this.MainTab.Items.Add(tabitem);
-                MainTab.SelectedIndex = 0;
+                //Analyse.CreateMethodology((Method)combobox.SelectedIndex + 1);
+                //Analyse.Methodology.AddTestGroupBox(MainStackPanel,ActiveTestStackPanel);
             }
             catch(Exception ex)
             {
@@ -236,7 +236,7 @@ namespace PCS_Forms
 
         private void ButtonOpenTermsDictionary_Click(object sender, RoutedEventArgs e)
         {
-            this.Analyse.OpenDocument();
+            
         }
 
         private void ButtonSetAccountAsUnactive(object sender, RoutedEventArgs e)
@@ -269,42 +269,53 @@ namespace PCS_Forms
                     this.Close();
         }
 
-        private void ReloadMethod()
+        private void Reload()
         {
-            int method_index =this.ComboBoxMethod.SelectedIndex;
             this.SetEmptyInputContols(this.TestDataGrid);
             this.SetEmptyInputContols(this.TestedDataGrid);
-            this.ComboBoxMethod.SelectedIndex = method_index;
-            this.Analyse = null;
-            this.Analyse = new AnalyseData(LoadDataAs.NewTesting);
-        }
-
-        private void SetEmptyInputContols(Grid grid)
-        {
-            foreach (Control item in grid.Children)
+            foreach (FrameworkElement item in this.MainStackPanel.Children)
             {
-                TextBox textbox = item as TextBox;
-                if (textbox != null)
-                    textbox.Text = string.Empty;
-
-                else
+                MyGroupBox groupBox = item as MyGroupBox;
+                if (groupBox != null)
                 {
-                    ComboBox combobox = item as ComboBox;
-                    if (combobox != null)
-                        combobox.SelectedIndex = -1;
-                    else
+                    var stackPanel = groupBox.GetStackPanel();
+                    var groupBox2 = stackPanel.Children;
+                    foreach (MyStackPanel control in groupBox2)
                     {
-                        DatePicker datepicker = item as DatePicker;
-                        if (datepicker != null)
-                            datepicker.Text = string.Empty;
+                        foreach (TextBox textBox in control.Children)
+                        {
+                            if (textBox != null)
+                            {
+                                textBox.Text = string.Empty;
+                            }
+                        }
                     }
                 }
             }
         }
 
+        private void SetEmptyInputContols(Panel panel)
+        {
+
+            foreach (Control item in panel.Children)
+            {
+                TextBox textbox = item as TextBox;
+                if (textbox != null)
+                    textbox.Text = string.Empty;
+                ComboBox combobox = item as ComboBox;
+                if (combobox != null)
+                    combobox.SelectedIndex = -1;
+                DatePicker datepicker = item as DatePicker;
+                if (datepicker != null)
+                    datepicker.Text = string.Empty;
+
+
+            }
+        }
+
         private void ButtoClearResults_Click(object sender, RoutedEventArgs e)
         {
-            this.ReloadMethod();
+            this.Reload();
         }
 
         private void ButtonSaveResults_Click(object sender, RoutedEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCS_Forms"
         xmlns:Core="clr-namespace:Core;assembly=Core" xmlns:Controls="clr-namespace:PCS_Forms.Controls" x:Class="PCS_Forms.MainWindow"
         mc:Ignorable="d"
-        Title="Расчет результатов психологического тестирования" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ResizeMode="CanMinimize" Width="1108" Height="667" Closing="EventExit" Icon="Images/Logo.ico">
+        Title="Расчет результатов психологического тестирования" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center"  Width="1108" Height="667" Closing="EventExit" Icon="Images/Logo.ico">
     <Grid x:Name="MainGrid" Background="#99B8F3B2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="13*"/>
@@ -26,39 +26,37 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="28*"/>
-            <RowDefinition Height="42*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="416*"/>
-            <RowDefinition Height="67*"/>
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="414*"/>
+            <RowDefinition Height="62*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="32*"/>
+            <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
-        <TabControl x:Name="MainTab"  Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="9" Grid.RowSpan="2" Margin="0,0,0,8"/>
-        <Button x:Name="ButtonStartInterpretation" Content="Получить характеристику" Grid.Column="11" Grid.Row="5" FontWeight="Bold" Click="ButtonStartInterpretation_Click" >
+        <Button x:Name="ButtonStartInterpretation" Content="Получить характеристику" Grid.Column="11" Grid.Row="7" FontWeight="Bold" Click="ButtonStartInterpretation_Click" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF77FB71" Offset="1"/>
                     <GradientStop Color="White"/>
+                    <GradientStop Color="#FF7AFB74" Offset="0.977"/>
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <GroupBox  Header="Данные теста" Grid.Column="1" Grid.Row="1" BorderBrush="#FF010113" Grid.RowSpan="5" >
-            <Grid Name="TestDataGrid" >
+        <GroupBox  Header="Данные теста" Grid.Column="1" Grid.Row="1" BorderBrush="#FF010113" Grid.RowSpan="7" >
+            <Grid Name="TestDataGrid" Margin="2,0,-2,0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="117*" />
-                    <ColumnDefinition Width="196*" />
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="128*" />
+                    <ColumnDefinition Width="169*" />
+                    <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="19*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="27*"/>
-                    <RowDefinition Height="15*"/>
-                    <RowDefinition Height="147*"/>
-                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="167*"/>
+                    <RowDefinition Height="91*"/>
                     <RowDefinition Height="313*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Grid.ColumnSpan="3" Header="Тестируемый" Grid.Row="6" Margin="0,0,0,3" BorderBrush="#FF081015" >
+                <GroupBox Grid.ColumnSpan="3" Header="Тестируемый" Grid.Row="2" Margin="0,0,0,3" BorderBrush="#FF081015" >
                     <Grid Margin="0,1,2,-4" Name="TestedDataGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="7*" />
@@ -90,16 +88,28 @@
                         <Label Content="Фамилия" HorizontalContentAlignment="Center" Margin="0,23,0,3" Grid.RowSpan="2"/>
                         <Label Content="Имя" Grid.Row="2" HorizontalContentAlignment="Center"/>
                         <Label Content="Отчество"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,3,0,24" Grid.RowSpan="2"   />
-                        <Controls:MyTextBox Grid.Column="1" TextWrapping="Wrap" x:Name="TextBoxSurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Margin="0,23,0,3" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
-                        <Controls:MyTextBox x:Name="TextBoxName" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" Margin="0,0,0,2" />
-                        <Controls:MyTextBox Grid.Column="1"  Grid.Row="3" x:Name="TextBoxLastName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="6" Margin="0,3,0,24" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" />
+                        <Controls:MyTextBox Text="{Binding Surname}" x:Name="TextBoxSurname" Grid.Column="1" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Margin="0,23,0,3" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
+                        <Controls:MyTextBox Text="{Binding Name}" x:Name="TextBoxName" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" Margin="0,0,0,2" />
+                        <Controls:MyTextBox Text="{Binding Lastname}" x:Name="TextBoxLastName"  Grid.Column="1"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="6" Margin="0,3,0,24" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" />
                     </Grid>
                 </GroupBox>
-                <Label Content="Выбор методики" HorizontalContentAlignment="Center" Margin="0,17,0,2" Grid.RowSpan="2"/>
-                <Label Content="Дата тестирования" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Center"/>
-                <ComboBox Grid.Column="1" x:Name="ComboBoxMethod" TabIndex="0" SelectionChanged="ComboBoxMethod_SelectionChanged" Margin="0,17,0,2" Grid.RowSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                <DatePicker Name="DatePickerTesting" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" Background="White" FirstDayOfWeek="Monday" SelectedDateFormat="Short" />
-                <GroupBox Header="Психолог"  Grid.Row="4"  Grid.ColumnSpan="3" BorderBrush="#FF0C151B" >
+                <GroupBox Header="Методика" Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="#FF080808">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="47*"/>
+                            <ColumnDefinition Width="48*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="43*"/>
+                            <RowDefinition Height="42*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Выбор методики" HorizontalContentAlignment="Center" />
+                        <Label Content="Дата тестирования" Grid.Column="0" HorizontalContentAlignment="Center"  Grid.Row="1" />
+                        <ComboBox x:Name="ComboBoxMethod" TabIndex="0" SelectionChanged="ComboBoxMethod_SelectionChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5" />
+                        <DatePicker Name="DatePickerTesting" HorizontalContentAlignment="Center" Background="White" FirstDayOfWeek="Monday" SelectedDateFormat="Short"  Grid.Column="1" Grid.Row="1" Margin="0,5"  />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Психолог"  Grid.ColumnSpan="3" BorderBrush="#FF0C151B" Margin="0,10,0,5" Foreground="#FF0A0909" Background="#FFBEFFBB" >
                     <Grid Name="PsyDataGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="7*"/>
@@ -143,7 +153,7 @@
         </Menu>
         <Image Grid.ColumnSpan="1" Grid.Column="12" Grid.Row="1" Source="Images/Logo.png" />
         <TextBlock Grid.Column="3"  Grid.Row="1" Grid.ColumnSpan="9" Text="ПРОГРАММА РАСЧЕТА РЕЗУЛЬТАТОВ ПСИХОЛОГИЧЕСКОГО ТЕСТИРОВАНИЯ" FontSize="19" VerticalAlignment="Center" Height="26" Margin="0,9"  />
-        <Button Content="Очистить результаты" Grid.Column="5"  Grid.Row="5" Grid.ColumnSpan="2" FontWeight="Bold" Click="ButtoClearResults_Click" IsCancel="True" >
+        <Button Content="Очистить результаты" Grid.Column="5"  Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Bold" Click="ButtoClearResults_Click" IsCancel="True" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE4E4E4" Offset="0.004"/>
@@ -154,7 +164,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button Grid.ColumnSpan="2" Content="Сохранить результаты" Grid.Column="8" Grid.Row="5" Click="ButtonSaveResults_Click" FontWeight="Bold" >
+        <Button Grid.ColumnSpan="2" Content="Сохранить результаты" Grid.Column="8" Grid.Row="7" Click="ButtonSaveResults_Click" FontWeight="Bold" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Snow" Offset="0"/>
@@ -165,5 +175,8 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
+        <StackPanel Name="MainStackPanel" Grid.ColumnSpan="10" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Background="White">
+        </StackPanel>
+        <StackPanel x:Name="ActiveTestStackPanel" Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="10" Background="White" Orientation="Horizontal"/>
     </Grid>
 </Window>

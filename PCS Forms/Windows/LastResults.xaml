@@ -5,12 +5,12 @@
         Title="Результаты прошлых тестирований" Height="487.68" Loaded="Window_Loaded" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Center" VerticalAlignment="Center" Width="646" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="/PSC;component/Images/Logo.ico" Background="#99B8F3B2">
     <DataGrid x:Name="DataResults" Margin="10">
         <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Number}" Header="Number" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Id}"       Header="Id" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Method}"   Header="Method" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Date}"     Header="Date" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Tested}"   Header="Tested" IsReadOnly="True"/>
-            <DataGridTemplateColumn  Header="Results" IsReadOnly="True">
+            <DataGridTextColumn Binding="{Binding Number}" Header="Номер" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Id}"     Header="ID"    IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Method}" Header="Метод" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Date}"   Header="Дата"  IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Tested}" Header="ФИО"   IsReadOnly="True"/>
+            <DataGridTemplateColumn  Header="Результаты" IsReadOnly="True">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Click="button_Click">Результаты</Button>

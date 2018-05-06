@@ -12,20 +12,18 @@ namespace PCS_Forms.Windows
     /// </summary>
     public partial class ResultsWindow : Window
     {
-        AnalyseData analyse;
         public ResultsWindow()
         {
             InitializeComponent();
         }
 
-        public void WriteResults(AnalyseData analyse)
+        public void WriteResults()
         {
-            this.analyse = analyse;
-            this.AddHeader( analyse.Methodology.Method, analyse.DateTesting);
-            this.AddPsychologist(analyse.Psychologist);
-            this.AddTested(analyse.Student);
-            this.AddCalculatingResults(analyse.ListReportData);
-            this.Show();
+            //this.AddHeader( AnalyseData.Methodology.Method, analyse.DateTesting);
+            //this.AddPsychologist(analyse.Psychologist);
+            //this.AddTested(analyse.Student);
+            //this.AddCalculatingResults(analyse.ListReportData);
+            //this.Show();
         }
 
         private void AddHeader(Method method, System.DateTime dateTime)
@@ -89,15 +87,7 @@ namespace PCS_Forms.Windows
         private void ButtonWord_Click(object sender, RoutedEventArgs e)
         {
             
-            try
-            {
-                Report report = new Report(analyse);
-                this.Close();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+           
         }
 
         private void ButtonExit_Click(object sender, RoutedEventArgs e)

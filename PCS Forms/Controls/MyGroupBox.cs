@@ -6,27 +6,26 @@ namespace PCS_Forms.Controls
     using Database;
     public class MyGroupBox:GroupBox
     {
-        private MyWrapPanel _wrappanel;
+        private MyStackPanel _stackPanel;
 
         public MyGroupBox()
         {
-            this._wrappanel = new MyWrapPanel();
-            this._wrappanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            this._wrappanel.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            this.AddChild(_wrappanel);
-        }
-
-
-        public void AddElement(UIElement element)
-        {
-            _wrappanel.AddElement(element);
+            this._stackPanel = new MyStackPanel(Orientation.Horizontal);
+            //this._stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            //this._stackPanel.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            this.AddChild(_stackPanel);
             
         }
 
-        public void WrapPanelAlignment(HorizontalAlignment horizontal,VerticalAlignment vertical)
+        public MyStackPanel GetStackPanel()
         {
-            this._wrappanel.HorizontalAlignment = horizontal;
-            this._wrappanel.VerticalAlignment = vertical;
+            return _stackPanel;
+        }
+
+        public void AddElement(UIElement element)
+        {
+            _stackPanel.AddElement(element);
+            
         }
     }
 }

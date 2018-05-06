@@ -1,0 +1,32 @@
+C:\Test\PCS\Debug\PSC.exe.config
+W:\Projects\PCS\PCS Forms\obj\Debug\PCS Forms.csproj.ResolveComReference.cache
+C:\Test\PCS\Debug\Files\Dictionary.docx
+C:\Test\PCS\Debug\PSC.exe.manifest
+C:\Test\PCS\Debug\PSC.application
+C:\Test\PCS\Debug\PSC.exe
+C:\Test\PCS\Debug\PSC.pdb
+W:\Projects\PCS\PCS Forms\obj\Debug\PCS Forms.csprojResolveAssemblyReference.cache
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\LastResults.baml
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\LoginForm.baml
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\ResultsWindow.baml
+W:\Projects\PCS\PCS Forms\obj\Debug\MainWindow.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\LastResults.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\LoginForm.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\RegistrationWindow.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\ResultsWindow.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\App.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC_Content.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\GeneratedInternalTypeHelper.g.cs
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC_MarkupCompile.cache
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC_MarkupCompile.lref
+W:\Projects\PCS\PCS Forms\obj\Debug\MainWindow.baml
+W:\Projects\PCS\PCS Forms\obj\Debug\Windows\RegistrationWindow.baml
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.g.resources
+W:\Projects\PCS\PCS Forms\obj\Debug\PCS_Forms.Properties.Resources.resources
+W:\Projects\PCS\PCS Forms\obj\Debug\PCS Forms.csproj.GenerateResource.Cache
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.TrustInfo.xml
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.exe.manifest
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.application
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.exe
+W:\Projects\PCS\PCS Forms\obj\Debug\PSC.pdb
+C:\Test\PCS\Debug\Interpretor.sdf
