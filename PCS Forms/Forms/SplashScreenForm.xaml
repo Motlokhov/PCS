@@ -1,0 +1,13 @@
+﻿<Window x:Class="PCS_Forms.Forms.SplashScreenForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SplashScreenForm" AllowsTransparency="True" WindowStyle="None" Height="599.961" Width="799.89" WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <ImageBrush/>
+    </Window.Background>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/PSC;component/Images/Logo.png" Stretch="Uniform"/>
+        </Grid.Background>
+    </Grid>
+</Window>

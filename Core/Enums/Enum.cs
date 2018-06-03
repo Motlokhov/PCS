@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Collections.Generic;
+
 namespace Core.Enums
 {
     public static class EnumUtils
@@ -12,20 +14,20 @@ namespace Core.Enums
             return attribute.Description;
         }
 
-        public static object EnumValueOf(string value, Type enum_type)
+        public static object EnumValueOf(string value, Type enumType)
         {
-            string[] names = Enum.GetNames(enum_type);
+            string[] names = Enum.GetNames(enumType);
             foreach (string name in names)
             {
-                if(ValueOf((Enum)Enum.Parse(enum_type,name)).Equals(value))
-                    return Enum.Parse(enum_type,name);
+                if (ValueOf((Enum)Enum.Parse(enumType, name)).Equals(value))
+                    return Enum.Parse(enumType, name);
             }
             throw new ArgumentException("Строка не описана или не задана.");
         }
 
-        public static string[] CollectionValueOf(Type enum_type)
+        public static string[] CollectionValueOf(Type enumType)
         {
-            Array enums= Enum.GetValues(enum_type);
+            Array enums = Enum.GetValues(enumType);
             string[] values = new string[enums.Length];
             int i = 0;
             foreach (object val in enums)
@@ -35,6 +37,7 @@ namespace Core.Enums
             }
             return values;
         }
+
     }
 
    /// <summary>
@@ -59,7 +62,7 @@ namespace Core.Enums
     /// <summary>
     /// Состав семьи
     /// </summary>
-   public enum Composition_of_family
+   public enum CompositionOfFamily
     {
         [DescriptionAttribute("Полная")]
         full,
@@ -106,7 +109,7 @@ namespace Core.Enums
     /// <summary>
     /// Суициды в семье
     /// </summary>
-    public enum Suicide_in_family 
+    public enum SuicideInFamily 
     {
         [DescriptionAttribute("Нет")]
         no,
@@ -121,8 +124,8 @@ namespace Core.Enums
     /// </summary>
     public enum Method
     {
-        [DescriptionAttribute("Pav-1")]
-        pav1 =1,
+        //[DescriptionAttribute("Pav-1")]
+        //pav1 =1,
         [DescriptionAttribute("Pav-2")]
         pav2 = 2
         
@@ -145,8 +148,4 @@ namespace Core.Enums
     /// </summary>
     public enum ReportType { asString, asChart }
 
-    /// <summary>
-    /// Как происходит загрузка данных
-    /// </summary>
-    public enum LoadDataAs { PastTesting, NewTesting }
 }

@@ -1,137 +1,151 @@
-﻿using System;
-using Microsoft.Office.Interop.Word;
-using Microsoft.Office.Interop;
+﻿using Core.Person;
+using Core.Test;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
-using PCS_Forms.Core;
-using System.IO;
-namespace PCS_Forms.DataOut
+
+namespace Report
 {
-   public class Report:IDisposable
-    {
-        private Microsoft.Office.Interop.Word.Application _wordApp;
-        private Document _wordDoc;
-        private Range _range;
+   public class Report
+   {
+       private WordprocessingDocument _wordDoc;
+       private MainDocumentPart _mainPart;
+       private Document _document;
+       private Body _body;
+       private Paragraph _currentParagraph;
+       private readonly Result _result;
 
-        //public Report(AnalyseData analyse)
-        //{
-        //    this._wordApp = new Application();
-        //    this._wordDoc = this._wordApp.Documents.Add(Type.Missing);
-        //    this.WriteToWord(analyse);
+       public Report(Result result)
+       {
+           _result = result;
+           //using (var wordDocument = WordprocessingDocument.Create(@"C:\dou.docx", WordprocessingDocumentType.Document, true))
+           //{
+           //    var mainPart = wordDocument.AddMainDocumentPart();
+           //    mainPart.Document = new Document();
+           //    mainPart.Document.Body = new Body();
+           //    var body = mainPart.Document.Body;
+           //    var p = new Paragraph();
+           //    var run = new Run();
+           //    var text = new Text("Новый текст");
+           //    run.Append(text);
+           //    p.Append(run);
+           //    body.Append(p);
+           //    wordDocument.MainDocumentPart.Document.Save();
+           //    wordDocument.Close();
+           //}
+       }
 
-        //}
+       public void SaveTo(string path)
+       {
+           using (_wordDoc = WordprocessingDocument.Create(@path,WordprocessingDocumentType.Document,true))
+           {
+               _mainPart = _wordDoc.AddMainDocumentPart();
+               _document = new Document();
+               _body = new Body();
+               _document.Body = _body;
+               _mainPart.Document = _document;
+               AddFullInformation();
+               _wordDoc.MainDocumentPart.Document.Save();
+               _wordDoc.Close();
+           }
+       }
 
-        public Report()
-        {
-            this._wordApp = new Application();
-            string path = @Directory.GetCurrentDirectory() + @"\Files\Dictionary.docx";
-            this._wordDoc = this._wordApp.Documents.Open(path);
-            this.WordAddVisible(true);
-        }
+       private void NewParagraph(int aligment)
+       {
+           _currentParagraph = new Paragraph();
+           _currentParagraph.Append(AddAligment(aligment));
+       }
 
-        public void Dispose()
-        {
-            this._wordApp = null;
-            this._wordDoc = null;
-            this._range = null;
-            
-        }
+       private void AppendCurrentParagraph()
+       {
+           _body.Append(_currentParagraph);
+       }
 
-        private void AddParagraph(Range range,WdParagraphAlignment alignment)
-        {
-            this._wordDoc.Paragraphs.Add(range);
-            this._wordDoc.Paragraphs.Last.Alignment = alignment;
-            
-        }
+       private RunProperties AddBold()
+       {
+           var rProp = new RunProperties();
+           var boldStyle = new Bold();
+           boldStyle.Val = true;
+           rProp.Append(boldStyle);
+           return rProp;
+       }
 
-        public void AddRange(string text, int bold = 0, WdParagraphAlignment alignment = WdParagraphAlignment.wdAlignParagraphCenter)
-        {
-            if (_range == null)
-                _range = _wordDoc.Range(0, 0);
-            else
-                this._range.Start = _range.End;   
-            this._range.Text = text;
-            this._range.Bold = bold;
-            this.AddParagraph(_range,alignment);
-        }
+       private ParagraphProperties AddAligment(int aligment)
+       {
+           var pProp = new ParagraphProperties();
+           Justification justification = new Justification() { Val = JustificationValues.Center };
+           switch (aligment)
+           {
+               case 1: { justification.Val = JustificationValues.Center; break; }
+               case 2: { justification.Val = JustificationValues.Both; break; }
+               default: { justification.Val = JustificationValues.Left; break; }
+           }
+           pProp.Append(justification);
+           return pProp;
+       }
 
-        public void WordAddVisible(bool visible)
-        {
-            this._wordApp.Visible = visible;
-        }
+       private void AddText(string text,bool bold = false, int aligment = 0)
+       {
+           NewParagraph(aligment);
+           var newText = new Text(text);
+           
+           var run = new Run();
+           if (bold)
+           {
+               run.Append(AddBold());
+           }
+           run.Append(newText);
+           _currentParagraph.Append(run);
+           AppendCurrentParagraph();
+       }
 
-        public void WriteToWord()
-        {
-            //this.AddFullInformation(analyse);
-            //this.WordAddVisible(true);
-            
-        }
+       private void AddHeader(string method, string date)
+       {
+           
+           AddText("Результаты психологического",true,1);
+           AddText("Тестирования по методике " + method, true,1);
+           AddText("Дата тестирования: " + date, true,1);          
+       }
 
-        private void AddHeaderWord(string method, DateTime date)
-        {
-            this.AddRange("Результаты психологического", 1);
-            this.AddRange("тестирования по методике " + method, 1);
-            this.AddRange("Дата тестирования: " + date.ToString("d"));
-            this.AddRange(string.Empty);
-        }
+       private void AddFullInformation()
+       {
+           AddHeader(_result.Method.ToString(),_result.Date);
+           AddTestedInfo(_result.Tested);
+           AddCalculatingCharacteristic(_result.Interpretation);
+           AddPsycologistInfo(_result.Psy);
+       }
 
-        private void AddFullInformation()
-        {
-            //this.AddHeaderWord(analyse.Methodology.Method.ToString(), analyse.DateTesting);
-            //this.AddTestedName(analyse.Student);
-            //this.AddPrimaryCharacteristic(analyse.Student);
-            //this.AddCalculatingCharacteristic(analyse.ListReportData);
-            //this.AddWhoWasConducted(analyse.Psychologist);
-        }
 
-        private void AddTestedName(Student student)
-        {
-            this.AddRange(student.ReturnFullName(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-        }
+       private void AddCalculatingCharacteristic(List<string> list)
+       {
+           AddText("Характеристика", true);
+           foreach (var str in list)
+           {
+               AddText(str,false,2);
+           }
+       }
 
-        private void AddCalculatingCharacteristic(List<ReportData> list_report_data)
-        {
-            foreach (ReportData report_data in list_report_data)
-            {
-                if (report_data.Type == ReportType.asString)
-                {
-                    foreach (string data in report_data.Data)
-                        if (data != string.Empty)
-                            this.AddRange(data, 0, WdParagraphAlignment.wdAlignParagraphJustify);
-                }
-                if (report_data.Type == ReportType.asChart)
-                {
-                    string values = string.Empty;
-                    foreach (string value in report_data.Data)
-                        values += value + " ";
-                    if (!string.IsNullOrEmpty(values))
-                        this.AddRange(values, 0, WdParagraphAlignment.wdAlignParagraphJustify);
-                }
-            }
-            this.AddRange(string.Empty);
-        }
+       private void AddTestedInfo(Tested student)
+       {
+           AddText("Тестируемый: " + student.FullName);
+           AddText("Образование: " + student.Education);
+           AddText("Состав семьи: " + student.Composition);
+           AddText("Особенности: " + student.Defect);
+           AddText("Приводы в полицию: " + student.Detained);
+           AddText("Попытки суицида в семье: " + student.Suicide);
+           AddText(string.Empty);
+           AddText("Заметки: __________________________________________________________________________________"+
+                            "__________________________________________________________________________________");
+           AddText(string.Empty);
+       }
 
-        private void AddPrimaryCharacteristic(Student student)
-        {
-            this.AddRange("Образование: " + student.ValueOfEducation(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange("Состав семьи: " + student.ValueOfFamily(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange("Особенности: " + student.ValueOfDefect(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange("Приводы в полицию: " + student.ValueOfDetained(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange("Попытки суицида в семье: " + student.ValueOfSuicide(), 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange(string.Empty);
-            this.AddRange("Заметки:", 0, WdParagraphAlignment.wdAlignParagraphLeft);
-            this.AddRange("_______________________________________________________");
-            this.AddRange("_______________________________________________________");
-            this.AddRange("_______________________________________________________");
-            this.AddRange(string.Empty);
-            
-        }
-
-        private void AddWhoWasConducted(Psychologist psychologist)
-        {
-            this.AddRange("");
-            this.AddRange("Психолог                                                                 " + DateTime.Today.ToString("d"), 0, WdParagraphAlignment.wdAlignParagraphJustify);
-            this.AddRange(psychologist.ReturnFullName() + "                                Подпись____________", 0, WdParagraphAlignment.wdAlignParagraphJustify);
-
-        }
+       private void AddPsycologistInfo(Psycologist psycologist)
+       {
+           AddText(string.Empty);
+           AddText("Психолог                                                                                    " + DateTime.Today.ToString("d"),true);
+           AddText(psycologist.FullName + "                                             Подпись____________",true);
+       }
     }
 }

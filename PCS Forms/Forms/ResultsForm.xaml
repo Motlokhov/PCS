@@ -1,0 +1,96 @@
+﻿<Window x:Name="ResultsWindow1" x:Class="PCS_Forms.Windows.ResultsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ResultsWindow" Height="459.701" Width="834.328" ResizeMode="CanMinimize">
+    <Grid x:Name="ResultsWindow2" Background="#99B8F3B2" Margin="0,0,-6,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition Width="128*"/>
+            <ColumnDefinition Width="264*"/>
+            <ColumnDefinition Width="113*"/>
+            <ColumnDefinition Width="91*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="115*"/>
+            <ColumnDefinition Width="43*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="16*"/>
+            <RowDefinition Height="27*"/>
+            <RowDefinition Height="27*"/>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="27*"/>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="189*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+        <ItemsControl ItemsSource="{Binding}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"></StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="10,10,10,80" VerticalAlignment="Bottom">
+                        <Border Name="border" Margin="3,10,3,10" Background="Blue"
+                                Width="10" BorderBrush="Blue" BorderThickness="3"
+                                Height="{Binding Data}">
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Border.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation From="0" Duration="0:0:02.0"
+                                                             Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="FrameworkElement.Height">
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
+                        </Border>
+                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold"
+                                   FontFamily="Arial" Text="{Binding Value}">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform Y="0"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Foreground="Black"
+                                   FontWeight="Bold" FontFamily="Arial"
+                                   Text="{Binding Name}">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform Y="0"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Content="Открыть в Word"     Grid.Column="6" Grid.Row="10" FontWeight="Bold" Background="#FF515AFF" Foreground="White" Click="ButtonWord_Click" />
+        <Button Content="Закрыть"            Grid.Column="1" Grid.Row="10" Background="#FFF55A5A" FontWeight="Bold" Foreground="#FFF" Click="ButtonExit_Click"/>
+        <Label  Content="Тестируемый"        Grid.Column="1" Grid.Row="2"/>
+        <Label  Content="Психолог"           Grid.Column="1" Grid.Row="3" />
+        <Label  Content="Дата тестирования"  Grid.Column="1" Grid.Row="4" />
+        <Label  Content="Метод тестирования" Grid.Column="1" Grid.Row="5"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Height="27" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=Tested.FullName,Mode=OneWay}" VerticalAlignment="Top" Width="254" IsReadOnly="True"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Height="27" Grid.Row="3" TextWrapping="Wrap" Text="{Binding Path=Psy.FullName,Mode=OneWay}" VerticalAlignment="Top" Width="254" IsReadOnly="True"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Height="28" Grid.Row="4" TextWrapping="Wrap" Text="{Binding Path=Date,Mode=OneWay}" VerticalAlignment="Top" Width="254" IsReadOnly="True"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Height="27" Grid.Row="5" TextWrapping="Wrap" Text="{Binding Path=Method,Mode=OneWay}" VerticalAlignment="Top" Width="254" IsReadOnly="True"/>
+        <Label Content="Образование" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Height="27" Width="129" Grid.ColumnSpan="2"/>
+        <Label Content="Состав семьи" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Height="27" Width="129" Grid.ColumnSpan="2"/>
+        <Label Content="Особенности" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Height="28" Width="129" Grid.ColumnSpan="2"/>
+        <Label Content="Приводы" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Top" Height="27" Width="129" Grid.ColumnSpan="2"/>
+        <Label Content="Суициды в семье" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Height="28" Width="129" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=Tested.Education,Mode=OneWay}" VerticalAlignment="Top" Width="246" IsReadOnly="True" Grid.ColumnSpan="3"/>
+        <TextBox Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="3" TextWrapping="Wrap" Text="{Binding Path=Tested.Composition,Mode=OneWay}" VerticalAlignment="Top" Width="246" IsReadOnly="True" Grid.ColumnSpan="3"/>
+        <TextBox Grid.Column="4" HorizontalAlignment="Left" Height="28" Grid.Row="4" TextWrapping="Wrap" Text="{Binding Path=Tested.Defect,Mode=OneWay}" VerticalAlignment="Top" Width="246" IsReadOnly="True" Grid.ColumnSpan="3"/>
+        <TextBox Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="5" TextWrapping="Wrap" Text="{Binding Path=Tested.Detained,Mode=OneWay}" VerticalAlignment="Top" Width="246" IsReadOnly="True" Grid.ColumnSpan="3"/>
+        <TextBox Grid.Column="4" HorizontalAlignment="Left" Height="28" Grid.Row="6" TextWrapping="Wrap" Text="{Binding Path=Tested.Suicide,Mode=OneWay}" VerticalAlignment="Top" Width="246" IsReadOnly="True" Grid.ColumnSpan="3"/>
+        <ListView Name="mainListView" Grid.ColumnSpan="6" Grid.Column="1" HorizontalAlignment="Left" Height="189" Grid.Row="8" VerticalAlignment="Top" Width="761"/>
+        <Label Content="Характеристика" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="28" Width="128"/>
+
+    </Grid>
+</Window>

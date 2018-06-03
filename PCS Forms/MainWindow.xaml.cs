@@ -1,80 +1,97 @@
 ﻿using System;
 using System.Windows;
-using System.Collections.Generic;
 using System.Windows.Media;
-using System.Windows.Documents;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Threading;
+using Core.Enums;
+using Core.Person;
+using System.Diagnostics;
+using System.Security.Principal;
+
 namespace PCS_Forms
 {
-    using Controls;
-    using Core;
+    
     using Windows;
-    using Database;
+    using PCS_Forms.Forms;
+    using System.Threading.Tasks;
+    
+    
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     
     public partial class MainWindow : Window
     {
-
+        public Core Core { get; set; }
         
         public MainWindow()
         {
+            if (!MainWindow.IsAdmin())
+            {
+                MainWindow.OpenAsAdmin();
+            }
+            Hide();
+            var splash = new SplashScreenForm();
             InitializeComponent();
+            Core = Core.Construct();
+            PsyDataGrid.DataContext = Core;
+            TestedDataGrid.DataContext = Core;
+            ComboBoxesItemsSource();
+            OtherGrid.DataContext = Core;
+            MainListBox.ItemsSource = Core.Tests;
+            MainDatePicker.DisplayDateEnd = DateTime.Today;
+            CheckUser();
             
-            this.AddEnumDataInComboBoxes();
-            this.MinWidth = 1300;
-            this.MinHeight = 768;
-            this.Hide();
-            this.DatePickerTesting.DisplayDateEnd = DateTime.Today;
-            this.CheckHasActiveUser();
         }
 
-        private void CheckHasActiveUser()
+        private async void CheckUser()
         {
-            Database database = new Database();
-            database.ReadData("SELECT Id FROM Psychologist WHERE IsActive = 1 ORDER BY Id DESC");
-            if (database.Reader.Read())
+            bool isActive = await Task.Factory.StartNew<bool>
+                (
+                    ()=> Core.CheckActiveUser()
+                );
+            if (isActive)
             {
-                int id = (int)database.Reader["Id"];
-                LoginWindow login = new LoginWindow(id);
-                this.FillPsychologistTextBoxes(id);
+                new LoginForm().ShowDialog();
             }
             else
             {
-                RegistrationWindow registration = new RegistrationWindow();
+                Core.Psy = Psycologist.Construct();
+                new RegistrationForm().ShowDialog();
             }
         }
 
-        private void FillPsychologistTextBoxes(int id)
+        private static bool IsAdmin()
         {
-            //this.SetPsychologist(id);
-            //TextBoxPsyName.Text = this.Analyse.Psychologist.Name;
-            //TextBoxPsySurname.Text = this.Analyse.Psychologist.Surname;
-            //TextBoxPsyLastname.Text = this.Analyse.Psychologist.Lastname;
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principial = new WindowsPrincipal(id);
+            return principial.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        private static void OpenAsAdmin()
+        {
+            var processInfo = new ProcessStartInfo();
+            string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            processInfo.FileName = name;
+            processInfo.UseShellExecute = true;
+            processInfo.Verb = "runas";
+            System.Diagnostics.Process.Start(processInfo);
+            App.Current.Shutdown(0);
+        }
+
+        private void ComboBoxesItemsSource()
+        {
+            ComboBoxMethods.ItemsSource = Enum.GetValues(typeof(Method));
+            ComboboxEducaton.ItemsSource = EnumUtils.CollectionValueOf(typeof(Education));
+            ComboboxCompositionOfFamily.ItemsSource = EnumUtils.CollectionValueOf(typeof(CompositionOfFamily));
+            ComboboxDefects.ItemsSource = EnumUtils.CollectionValueOf(typeof(Defect));
+            ComboboxDefects.ItemsSource = EnumUtils.CollectionValueOf(typeof(Defect));
+            ComboboxSuicideIfFamily.ItemsSource = EnumUtils.CollectionValueOf(typeof(SuicideInFamily));
+            ComboboxDetained.ItemsSource = EnumUtils.CollectionValueOf(typeof(Detained));
+        }
+
         
-
-        private void AddEnumDataInComboBoxes()
-        {
-            this.AddEnumCollectionInComboBox(ComboboxEducaton, typeof(Education));
-            this.AddEnumCollectionInComboBox(ComboboxCompositionOfFamily, typeof(Composition_of_family));
-            this.AddEnumCollectionInComboBox(ComboboxDefects, typeof(Defect));
-            this.AddEnumCollectionInComboBox(ComboboxDetained, typeof(Detained));
-            this.AddEnumCollectionInComboBox(ComboBoxMethod, typeof(Method));
-            this.AddEnumCollectionInComboBox(ComboboxSuicideIfFamily, typeof(Suicide_in_family));
-        }
-
-        private void AddEnumCollectionInComboBox(ComboBox combobox, Type enum_type)
-        {
-            string[] enums = EnumUtils.CollectionValueOf(enum_type);
-            foreach (string value in enums)
-            {
-                ComboBoxItem item = new ComboBoxItem();
-                item.Content = value;
-                combobox.Items.Add(item);
-            }
-        }
 
 
         private bool CheckAllInputControls(Grid grid)
@@ -120,93 +137,17 @@ namespace PCS_Forms
         {
             try
             {
-                this.StartIterpretation(true);
-                this.ShowResults();
+                var result = Core.Interpretation();
+                new ResultsForm(result).Show();
             }
             catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
-        }
-
-        private void SaveResults()
-        {
-            
-        }
-
-        private void StartIterpretation(bool saveResult)
-        {
-            if (this.CheckAllInputControls(this.TestDataGrid))
-                if (this.CheckAllInputControls(this.PsyDataGrid))
-                    if (this.CheckAllInputControls(this.TestedDataGrid))
-                    {
-                        
-                        //this.SetStudent();
-                        //this.SetDate();
-                        //if (saveResult)
-                        //    thisAnalyse.InterpretationAndSave();
-                        //else
-                        //    this.Analyse.Interpretation();
-                    }
-        }
-
-        private void ShowResults()
-        {
-            //ResultsWindow resultsWindow;
-            //if (this.Analyse.ListReportData != null)
-            //    if (this.CheckIsWindowOpen("ResultsWindow"))
-            //    {
-            //        resultsWindow = new ResultsWindow();
-            //        resultsWindow.WriteResults(Analyse);
-            //        this.Reload();
-            //    }
-            
-        }
-
-        private void SetDate()
-        {
-           
-        }
-
-        private void SetStudent()
-        {
-            //Student student = new Student(TextBoxName.Text,
-            //                TextBoxSurname.Text,
-            //                TextBoxLastName.Text,
-            //                new Background(
-            //                    (Education)ComboboxEducaton.SelectedIndex,
-            //                    (Composition_of_family)ComboboxCompositionOfFamily.SelectedIndex,
-            //                    (Detained)ComboboxDetained.SelectedIndex,
-            //                    (Defect)ComboboxDefects.SelectedIndex,
-            //                    (Suicide_in_family)ComboboxSuicideIfFamily.SelectedIndex));
-            //Analyse.SetStudent(student);
-        }
-
-        private void SetPsychologist(int id)
-        {
-            //Psychologist psy = new Psychologist(id);
-            //Analyse.SetPsychologist(psy);
-        }
-
-        private void ComboBoxMethod_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            MainStackPanel.Children.Clear();
-            ActiveTestStackPanel.Children.Clear();
-            ComboBox combobox = sender as ComboBox;
-            try
-            {
-                if (combobox.SelectedIndex == -1)
-                    return;
-                //Analyse.CreateMethodology((Method)combobox.SelectedIndex + 1);
-                //Analyse.Methodology.AddTestGroupBox(MainStackPanel,ActiveTestStackPanel);
-            }
-            catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
 
-        
+
+       
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -220,9 +161,9 @@ namespace PCS_Forms
 
         private void ButtonLastResults_Click(object sender, RoutedEventArgs e)
         {
-            LastResults lastresults;
+            LastResultsForm lastresults;
             if (CheckIsWindowOpen("LastResultsWindow"))
-                lastresults = new LastResults();
+                lastresults = new LastResultsForm();
         }
 
 
@@ -243,16 +184,14 @@ namespace PCS_Forms
         {
             if (MessageBox.Show("Вы собираетесь удалить собственную учетную запись! Вы подтверждаете это действие?", "Удаление учетной записи!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                Database database = new Database();
-                database.ExecuteScalar("UPDATE Psychologist SET IsActive = 0");
-                database.ConnectionClose();
-                if(MessageBox.Show("Программа закрывается!","",MessageBoxButton.OK) == MessageBoxResult.OK)
-                    this.Close();
+                Core.SetAccountAsUnactive();
+                if (MessageBox.Show("Программа закрывается!", "", MessageBoxButton.OK) == MessageBoxResult.OK)
+                {
+                    App.Current.Shutdown(0);
+                }
             }
             
         }
-
-      
 
         private void EventExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -269,65 +208,65 @@ namespace PCS_Forms
                     this.Close();
         }
 
-        private void Reload()
+        private void ButtonClearResults_Click(object sender, RoutedEventArgs e)
         {
-            this.SetEmptyInputContols(this.TestDataGrid);
-            this.SetEmptyInputContols(this.TestedDataGrid);
-            foreach (FrameworkElement item in this.MainStackPanel.Children)
+            Core.ClearResult();
+        }
+
+        private void ButtonSaveResults_Click(object sender, RoutedEventArgs e)
+        {
+
+            var result = Core.Interpretation();
+            Core.SaveResult(result);
+        }
+
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = sender as CheckBox;
+            if (checkbox != null)
             {
-                MyGroupBox groupBox = item as MyGroupBox;
-                if (groupBox != null)
+                var parent = checkbox.Parent as Grid;
+                UIElementCollection children = parent.Children;
+                foreach (var child in children)
                 {
-                    var stackPanel = groupBox.GetStackPanel();
-                    var groupBox2 = stackPanel.Children;
-                    foreach (MyStackPanel control in groupBox2)
+                    if (!child.Equals(checkbox))
                     {
-                        foreach (TextBox textBox in control.Children)
+                        var copy = child as Control;
+                        if (copy != null)
                         {
-                            if (textBox != null)
-                            {
-                                textBox.Text = string.Empty;
-                            }
+                            copy.IsEnabled = (bool)checkbox.IsChecked;
                         }
                     }
                 }
             }
         }
 
-        private void SetEmptyInputContols(Panel panel)
+        private void main_KeyUp(object sender, KeyEventArgs e)
         {
-
-            foreach (Control item in panel.Children)
+            if (e.Key == Key.Enter)
             {
-                TextBox textbox = item as TextBox;
-                if (textbox != null)
-                    textbox.Text = string.Empty;
-                ComboBox combobox = item as ComboBox;
-                if (combobox != null)
-                    combobox.SelectedIndex = -1;
-                DatePicker datepicker = item as DatePicker;
-                if (datepicker != null)
-                    datepicker.Text = string.Empty;
-
-
+                TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
+                UIElement keyboardFocus = Keyboard.FocusedElement as UIElement;
             }
         }
 
-        private void ButtoClearResults_Click(object sender, RoutedEventArgs e)
+        private void ComboBoxMethods_MouseEnter(object sender, MouseEventArgs e)
         {
-            this.Reload();
+            MainListBox.ItemsSource = Core.Tests;
         }
 
-        private void ButtonSaveResults_Click(object sender, RoutedEventArgs e)
+        private void GroupBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
-                this.StartIterpretation(true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
+            var groupBox = sender as GroupBox;
+            var grid = groupBox.Content as Grid;
+            grid.IsEnabled = !grid.IsEnabled;
         }
+
+        
+
+       
+
+      
     }
 }

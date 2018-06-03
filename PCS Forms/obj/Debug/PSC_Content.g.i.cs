@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("psc.sdf")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("files/dictionary.docx")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("interpretor.sdf")]
 
 

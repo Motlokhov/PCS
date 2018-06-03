@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCS_Forms"
-        xmlns:Core="clr-namespace:Core;assembly=Core" xmlns:Controls="clr-namespace:PCS_Forms.Controls" x:Class="PCS_Forms.MainWindow"
+        x:Class="PCS_Forms.MainWindow"
         mc:Ignorable="d"
-        Title="Расчет результатов психологического тестирования" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center"  Width="1108" Height="667" Closing="EventExit" Icon="Images/Logo.ico">
+        Title="Расчет результатов психологического тестирования" Name="main" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" HorizontalContentAlignment="Center"  Width="1108" Height="667" Closing="EventExit" Icon="Images/Logo.ico" KeyUp="main_KeyUp">
+    <Window.Resources>
+        <DataTemplate DataType="local:Value">
+            <TextBox Name="tb"></TextBox>
+            
+        </DataTemplate>
+    </Window.Resources>
     <Grid x:Name="MainGrid" Background="#99B8F3B2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="13*"/>
@@ -35,7 +41,7 @@
             <RowDefinition Height="32*"/>
             <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="ButtonStartInterpretation" Content="Получить характеристику" Grid.Column="11" Grid.Row="7" FontWeight="Bold" Click="ButtonStartInterpretation_Click" >
+        <Button x:Name="ButtonStartInterpretation" Content="Получить характеристику" Grid.Column="11" Grid.Row="7" FontWeight="Bold" Click="ButtonStartInterpretation_Click" TabIndex="19" IsTabStop="False" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF77FB71" Offset="1"/>
@@ -45,11 +51,11 @@
             </Button.Background>
         </Button>
         <GroupBox  Header="Данные теста" Grid.Column="1" Grid.Row="1" BorderBrush="#FF010113" Grid.RowSpan="7" >
-            <Grid Name="TestDataGrid" Margin="2,0,-2,0" >
+            <Grid x:Name="TestDataGrid" Margin="2,0,-2,0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="128*" />
-                    <ColumnDefinition Width="169*" />
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="55*" />
+                    <ColumnDefinition Width="93*" />
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="167*"/>
@@ -57,7 +63,7 @@
                     <RowDefinition Height="313*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Grid.ColumnSpan="3" Header="Тестируемый" Grid.Row="2" Margin="0,0,0,3" BorderBrush="#FF081015" >
-                    <Grid Margin="0,1,2,-4" Name="TestedDataGrid">
+                    <Grid Margin="0,1,2,-4" x:Name="TestedDataGrid" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="7*" />
                             <ColumnDefinition Width="12*" />
@@ -75,26 +81,26 @@
                             <RowDefinition    />
                             <RowDefinition    />
                         </Grid.RowDefinitions>
-                        <Label Content="Образование" Grid.Row="4" Margin="11,21,11,6" Grid.RowSpan="2" />
-                        <Label Content="Состав семьи" Grid.Row="5" Margin="11,24,11,2" Grid.RowSpan="2"/>
-                        <Label Content="Особенности" Grid.Row="7" HorizontalContentAlignment="Center" Margin="0,3,0,24" Grid.RowSpan="2"   />
-                        <Label Content="Приводы" Grid.Row="8" ToolTip="Приводы в полицию" Margin="22,6,23,21" Grid.RowSpan="2"/>
-                        <Label Content="Суициды в семье" Grid.Row="9" Margin="0,9,1,18" Grid.RowSpan="2" />
-                        <ComboBox Grid.Row="4" Grid.Column="1" Name="ComboboxEducaton" Margin="0,21,0,6" Grid.RowSpan="2"/>
-                        <ComboBox Grid.Row="5" Grid.Column="1" Name="ComboboxCompositionOfFamily" Margin="0,24,0,2" Grid.RowSpan="2"/>
-                        <ComboBox Grid.Row="7" Grid.Column="1" Name="ComboboxDefects" Margin="0,3,0,24" Grid.RowSpan="2"/>
-                        <ComboBox Grid.Row="8" Grid.Column="1" Name="ComboboxDetained" Margin="0,6,0,21" Grid.RowSpan="2"/>
-                        <ComboBox Grid.Row="9" Grid.Column="1" Name="ComboboxSuicideIfFamily" Margin="0,9,0,18" Grid.RowSpan="2"/>
-                        <Label Content="Фамилия" HorizontalContentAlignment="Center" Margin="0,23,0,3" Grid.RowSpan="2"/>
-                        <Label Content="Имя" Grid.Row="2" HorizontalContentAlignment="Center"/>
-                        <Label Content="Отчество"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,3,0,24" Grid.RowSpan="2"   />
-                        <Controls:MyTextBox Text="{Binding Surname}" x:Name="TextBoxSurname" Grid.Column="1" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Margin="0,23,0,3" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
-                        <Controls:MyTextBox Text="{Binding Name}" x:Name="TextBoxName" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" Margin="0,0,0,2" />
-                        <Controls:MyTextBox Text="{Binding Lastname}" x:Name="TextBoxLastName"  Grid.Column="1"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="6" Margin="0,3,0,24" Grid.RowSpan="2" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold" />
+                        <Label Content="Образование"     Grid.Row="5"  HorizontalContentAlignment="Center"/>
+                        <Label Content="Состав семьи"    Grid.Row="6"  HorizontalContentAlignment="Center"/>
+                        <Label Content="Особенности"     Grid.Row="7"  HorizontalContentAlignment="Center"/>
+                        <Label Content="Приводы"         Grid.Row="8"  HorizontalContentAlignment="Center"/>
+                        <Label Content="Суициды в семье" Grid.Row="9"  HorizontalContentAlignment="Center"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" Text="{Binding Tested.Education,  Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"  x:Name="ComboboxEducaton" TabIndex="6" />
+                        <ComboBox Grid.Row="6" Grid.Column="1" Text="{Binding Tested.Composition,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"  x:Name="ComboboxCompositionOfFamily" TabIndex="7" />
+                        <ComboBox Grid.Row="7" Grid.Column="1" Text="{Binding Tested.Defect,     Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"  x:Name="ComboboxDefects" TabIndex="8" />
+                        <ComboBox Grid.Row="8" Grid.Column="1" Text="{Binding Tested.Detained,   Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"  x:Name="ComboboxDetained" TabIndex="9"/>
+                        <ComboBox Grid.Row="9" Grid.Column="1" Text="{Binding Tested.Suicide,    Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"  x:Name="ComboboxSuicideIfFamily" TabIndex="10"/>
+                        <Label Content="Фамилия"  HorizontalContentAlignment="Center" Grid.Row="1"/>
+                        <Label Content="Имя"      HorizontalContentAlignment="Center" Grid.Row="2"/>
+                        <Label Content="Отчество" HorizontalContentAlignment="Center" Grid.Row="3"   />
+                        <TextBox Text="{Binding Tested.Surname}"  x:Name="TextBoxSurname"    Grid.Column="1"  Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
+                        <TextBox Text="{Binding Tested.Name}"     x:Name="TextBoxName"       Grid.Column="1"  Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="4" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
+                        <TextBox Text="{Binding Tested.Lastname}" x:Name="TextBoxLastName"   Grid.Column="1"  Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" Background="#FFF7FF51" TextChanged="TextBox_TextChanged" FontWeight="Bold"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Методика" Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="#FF080808">
-                    <Grid>
+                    <Grid Name="OtherGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="47*"/>
                             <ColumnDefinition Width="48*"/>
@@ -105,12 +111,12 @@
                         </Grid.RowDefinitions>
                         <Label Content="Выбор методики" HorizontalContentAlignment="Center" />
                         <Label Content="Дата тестирования" Grid.Column="0" HorizontalContentAlignment="Center"  Grid.Row="1" />
-                        <ComboBox x:Name="ComboBoxMethod" TabIndex="0" SelectionChanged="ComboBoxMethod_SelectionChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5" />
-                        <DatePicker Name="DatePickerTesting" HorizontalContentAlignment="Center" Background="White" FirstDayOfWeek="Monday" SelectedDateFormat="Short"  Grid.Column="1" Grid.Row="1" Margin="0,5"  />
+                        <ComboBox x:Name="ComboBoxMethods"  Text="{Binding Method}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5" IsTabStop="False" TabIndex="1" MouseEnter="ComboBoxMethods_MouseEnter" />
+                        <DatePicker Name="MainDatePicker" Text="{Binding Date,Mode=TwoWay}" HorizontalContentAlignment="Center" Background="White" FirstDayOfWeek="Monday" SelectedDateFormat="Short"  Grid.Column="1" Grid.Row="1" Margin="0,5" TabIndex="2"  />
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Психолог"  Grid.ColumnSpan="3" BorderBrush="#FF0C151B" Margin="0,10,0,5" Foreground="#FF0A0909" Background="#FFBEFFBB" >
-                    <Grid Name="PsyDataGrid">
+                <GroupBox Header="Психолог"  Grid.ColumnSpan="3" BorderBrush="#FF0C151B" Margin="0,10,0,5" Foreground="#FF0A0909" Background="#FFFBEEB1" >
+                    <Grid x:Name="PsyDataGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="7*"/>
                             <ColumnDefinition Width="12*"/>
@@ -122,12 +128,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBox Grid.Column="1" Name="TextBoxPsySurname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="1" Margin="0,22,0,3" Grid.RowSpan="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False" />
-                        <TextBox Grid.Row="2" Grid.Column="1" Name="TextBoxPsyName" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxPsyLastname" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" Margin="0,4,0,21" Grid.RowSpan="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
-                        <Label Content="Фамилия" HorizontalContentAlignment="Center" Margin="0,22,0,3" Grid.RowSpan="2"/>
-                        <Label Grid.Row="2" Content="Имя" HorizontalContentAlignment="Center"></Label>
-                        <Label Grid.Row="3" Content="Отчество" HorizontalContentAlignment="Center" Margin="0,4,0,21" Grid.RowSpan="2"></Label>
+                        <TextBox  Text="{Binding Mode=OneWay, Path=Psy.Surname}" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="1" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False" />
+                        <TextBox  Text="{Binding Mode=OneWay, Path=Psy.Name}"     Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="2" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
+                        <TextBox  Text="{Binding Mode=OneWay, Path=Psy.Lastname}" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" FontWeight="Bold" SelectionOpacity="0.1" IsEnabled="False"/>
+                        <Label Grid.Row="1" Content="Фамилия"   HorizontalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Content="Имя"       HorizontalContentAlignment="Center"/>
+                        <Label Grid.Row="3" Content="Отчество"  HorizontalContentAlignment="Center"/>
                     </Grid>
                 </GroupBox>
             </Grid>
@@ -135,12 +141,12 @@
         </GroupBox>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="14" Height="20" VerticalAlignment="Top">
             <MenuItem Header="Файл" Margin="5,0,0,0">
-                <MenuItem Name="MenuItemExit" Header="Выход" Click="ButtonClose_Click"></MenuItem>
+                <MenuItem x:Name="MenuItemExit" Header="Выход" Click="ButtonClose_Click"/>
             </MenuItem>
             <MenuItem Header="Тестирование">
                 <MenuItem Header="Получить характеристику" Click="ButtonStartInterpretation_Click"/>
                 <MenuItem Header="Сохранить результаты" Click="ButtonSaveResults_Click"/>
-                <MenuItem Header="Очистить результаты" Click="ButtoClearResults_Click"/>
+                <MenuItem Header="Очистить результаты" Click="ButtonClearResults_Click"/>
                 <MenuItem Header="Результаты прошлых тестирований" Click="ButtonLastResults_Click"/>
                 <MenuItem Header="Словарь терминов" Click="ButtonOpenTermsDictionary_Click"/>
             </MenuItem>
@@ -153,7 +159,7 @@
         </Menu>
         <Image Grid.ColumnSpan="1" Grid.Column="12" Grid.Row="1" Source="Images/Logo.png" />
         <TextBlock Grid.Column="3"  Grid.Row="1" Grid.ColumnSpan="9" Text="ПРОГРАММА РАСЧЕТА РЕЗУЛЬТАТОВ ПСИХОЛОГИЧЕСКОГО ТЕСТИРОВАНИЯ" FontSize="19" VerticalAlignment="Center" Height="26" Margin="0,9"  />
-        <Button Content="Очистить результаты" Grid.Column="5"  Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Bold" Click="ButtoClearResults_Click" IsCancel="True" >
+        <Button Content="Очистить результаты" Grid.Column="5"  Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Bold" Click="ButtonClearResults_Click" IsCancel="True" TabIndex="25" IsTabStop="False" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE4E4E4" Offset="0.004"/>
@@ -164,7 +170,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button Grid.ColumnSpan="2" Content="Сохранить результаты" Grid.Column="8" Grid.Row="7" Click="ButtonSaveResults_Click" FontWeight="Bold" >
+        <Button Grid.ColumnSpan="2" Content="Сохранить результаты" Grid.Column="8" Grid.Row="7" Click="ButtonSaveResults_Click" FontWeight="Bold" TabIndex="20" IsTabStop="False" >
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Snow" Offset="0"/>
@@ -175,8 +181,47 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <StackPanel Name="MainStackPanel" Grid.ColumnSpan="10" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Background="White">
-        </StackPanel>
-        <StackPanel x:Name="ActiveTestStackPanel" Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="10" Background="White" Orientation="Horizontal"/>
+        <ListView x:Name="MainListBox" Grid.ColumnSpan="10" Grid.Column="3" Grid.Row="2" Grid.RowSpan="4" Background="White" Grid.IsSharedSizeScope="True" Focusable="False" IsSynchronizedWithCurrentItem="False" Margin="0,10,0,0" TabIndex="11" IsTabStop="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <GroupBox Height="55" Header="{Binding Path=Name}" Margin="10,0,0,0" MinWidth="680" TabIndex="{Binding Path=Number}">
+                        <Grid  Background="White">
+                            <CheckBox IsChecked="{Binding Path=IsActive}" Margin="-13,-15,0,0"  Click="CheckBox_Click" ClickMode="Press" />
+                            <ItemsControl ItemsSource="{Binding Path=Parameters}" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.IsSharedSizeScope="True" IsTabStop="False" Focusable="False">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="5,5,5,5" Orientation="Horizontal" HorizontalAlignment="Left" IsEnabled="True">
+                                            <ItemsControl ItemsSource="{Binding Path=Values}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.IsSharedSizeScope="True" IsTabStop="False" Focusable="False">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Name="tb" Text="{Binding Path=Meaning,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  Width="60" TextChanged="TextBox_TextChanged" ToolTip="{Binding Path=Meaning}"  Background="Yellow"/>
+                                                        <DataTemplate.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=IsEnable}" Value="False">
+                                                                <Setter Property="IsEnabled" Value="False"></Setter>
+                                                            </DataTrigger>
+                                                        </DataTemplate.Triggers>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </Grid>
+                    </GroupBox>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>

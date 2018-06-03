@@ -6,28 +6,33 @@ using System.Reflection;
 
 namespace Database
 {
-    public enum TypeConnection {Select,Insert,Delete,Update};
-    public enum DatabasePath { Interpretor, Results };
-    public class Database
+
+    public class Database:IDisposable
     {
-        SqlCeConnection connection =new SqlCeConnection();
-        SqlCeCommand command =new SqlCeCommand();
-        public SqlCeDataReader Reader { get; private set; }
+        private SqlCeConnection connection =new SqlCeConnection();
+        private SqlCeCommand command =new SqlCeCommand();
+        private SqlCeDataReader reader;
 
         //необходима реализация метода Dispose для Database
-        public Database()
+        private Database()
         {
-            string connect = "Data Source ="+ Directory.GetCurrentDirectory()+@"\Interpretor.sdf";
-            //string connect = @"Data Source = C:\Work\Psyhologic calculating system\PCS Forms\" + ReturnPathToDataBase(path);
+            string connect = "Data Source =" + Directory.GetCurrentDirectory() + @"\PSC.sdf";
+            //string connect = @"Data Source = C:\Test\PCS\Debug\PSC.sdf";
             this.connection.ConnectionString = connect;
             this.command.Connection = connection;
             this.connection.Open();
         }
 
-        public void ReadData(string command_text)
+        public static Database Construct() 
         {
-            this.command.CommandText = command_text;
-            this.Reader = this.command.ExecuteReader();
+            return new Database();
+        }
+
+        public SqlCeDataReader ReadData(string command_text)
+        {
+            command.CommandText = command_text;
+            reader = command.ExecuteReader();
+            return reader;
         }
 
         public int ExecuteNonQuery(string command_text)
@@ -52,6 +57,11 @@ namespace Database
         {
             if (this.connection.State != System.Data.ConnectionState.Closed)
                 this.connection.Close();
+        }
+
+        public void Dispose()
+        {
+            GC.Collect();
         }
     }
 }

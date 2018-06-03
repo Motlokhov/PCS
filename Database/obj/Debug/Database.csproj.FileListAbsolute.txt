@@ -1,6 +1,6 @@
 C:\Test\DataBase\Debug\Database.dll.config
 C:\Test\DataBase\Debug\Database.dll
 C:\Test\DataBase\Debug\Database.pdb
-W:\Projects\PCS\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
 W:\Projects\PCS\Database\obj\Debug\Database.dll
 W:\Projects\PCS\Database\obj\Debug\Database.pdb
+W:\Projects\PCS\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
